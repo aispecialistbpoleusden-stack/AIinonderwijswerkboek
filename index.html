@@ -830,7 +830,7 @@
 
         .results-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
             gap: 20px;
         }
 
@@ -928,12 +928,43 @@
 
         .result-answer {
             background: #f8f9fa;
-            padding: 10px;
+            padding: 15px;
             border-radius: 8px;
             color: #333333;
             border: 1px solid #c9a959;
-            max-height: 150px;
+            max-height: 300px;
             overflow-y: auto;
+            font-size: 0.95em;
+            line-height: 1.5;
+        }
+
+        .mindmap-display {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #c9a959;
+            max-height: 300px;
+            overflow-y: auto;
+            font-size: 0.9em;
+            line-height: 1.5;
+        }
+
+        .mindmap-display strong {
+            color: #0a1a2b;
+            font-weight: 700;
+        }
+
+        .mindmap-display div {
+            margin-bottom: 8px;
+        }
+
+        .mindmap-category {
+            margin-left: 10px;
+            margin-top: 8px;
+            padding: 8px;
+            border-left: 3px solid #c9a959;
+            background: #ffffff;
+            border-radius: 4px;
         }
 
         .status-message {
@@ -1937,15 +1968,39 @@
                             </div>
                         `;
                     } else {
-                        // Probeer mindmap data te formatteren als het niveau 0 is
+                        // Speciale weergave voor mindmap (niveau 0)
                         let displayContent = result.content;
                         if (result.level === 0 && result.content) {
                             try {
                                 const mindmapData = JSON.parse(result.content);
-                                displayContent = `Centraal concept: ${mindmapData.centralConcept}\nAantal categorieën: ${mindmapData.nodes?.length || 0}`;
+                                let mindmapDisplay = `
+                                    <div style="margin-bottom: 10px;">
+                                        <strong>Centraal concept:</strong> ${mindmapData.centralConcept}
+                                    </div>
+                                    <div>
+                                        <strong>Categorieën (${mindmapData.nodes?.length || 0}):</strong>
+                                    </div>
+                                `;
+                                
+                                if (mindmapData.nodes && mindmapData.nodes.length > 0) {
+                                    mindmapData.nodes.forEach((node, idx) => {
+                                        mindmapDisplay += `
+                                            <div class="mindmap-category">
+                                                <strong>${node.label || `Categorie ${idx+1}`}:</strong><br>
+                                                ${node.content || 'Geen beschrijving'}
+                                            </div>
+                                        `;
+                                    });
+                                } else {
+                                    mindmapDisplay += '<div style="color: #999;">Nog geen categorieën toegevoegd</div>';
+                                }
+                                
+                                displayContent = mindmapDisplay;
                             } catch (e) {
-                                // Geen geldige JSON, toon zoals het is
+                                displayContent = result.content;
                             }
+                        } else {
+                            displayContent = result.content;
                         }
                         
                         return `
@@ -1959,9 +2014,8 @@
                                 <div class="result-question">
                                     <strong>${result.designTitle}</strong>
                                 </div>
-                                <div class="result-answer">
-                                    <strong>Uitwerking:</strong><br>
-                                    ${formatDesignContent(displayContent)}
+                                <div class="result-answer mindmap-display">
+                                    ${displayContent}
                                 </div>
                                 <small style="color: #666; display: block; margin-top: 10px;">
                                     ${new Date(result.timestamp).toLocaleString()}
