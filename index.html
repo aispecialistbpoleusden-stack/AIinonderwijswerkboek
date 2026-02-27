@@ -1,365 +1,1281 @@
-// Vervang de loadResults en loadLocalResults functies door deze uitgebreide versies:
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI in Onderwijs - Interactief Werkboek</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-function loadResults() {
-    const resultsGrid = document.getElementById('resultsGrid');
-    const filterLevel = document.getElementById('filterLevel').value;
-    const filterUser = document.getElementById('filterUser').value;
-    
-    if (!database) {
-        resultsGrid.innerHTML = '<p>⚠️ Database niet verbonden. Toon lokale resultaten...</p>';
-        loadLocalResults();
-        return;
-    }
-    
-    // Haal zowel antwoorden als ontwerpen op
-    Promise.all([
-        database.ref('answers').once('value'),
-        database.ref('designs').once('value')
-    ]).then(([answersSnapshot, designsSnapshot]) => {
-        const answers = answersSnapshot.val() || {};
-        const designs = designsSnapshot.val() || {};
-        
-        // Combineer en formatteer alle resultaten
-        let allResults = [];
-        
-        // Voeg antwoorden toe
-        Object.values(answers).forEach(answer => {
-            allResults.push({
-                type: 'answer',
-                userId: answer.userId,
-                level: answer.level,
-                questionIndex: answer.questionIndex,
-                questionText: levels[answer.level]?.questions[answer.questionIndex] || 'Vraag niet gevonden',
-                content: answer.answer,
-                timestamp: answer.timestamp,
-                levelName: levels[answer.level]?.name || 'Onbekend'
-            });
-        });
-        
-        // Voeg ontwerpen toe
-        Object.values(designs).forEach(design => {
-            allResults.push({
-                type: 'design',
-                userId: design.userId,
-                level: design.level,
-                designTitle: levels[design.level]?.designTask.title || 'Ontwerpopdracht',
-                content: design.design,
-                timestamp: design.timestamp,
-                levelName: levels[design.level]?.name || 'Onbekend'
-            });
-        });
-        
-        // Filters toepassen
-        if (filterLevel !== 'all') {
-            allResults = allResults.filter(r => r.level == filterLevel);
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
         }
-        if (filterUser !== 'all') {
-            allResults = allResults.filter(r => r.userId === filterUser);
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        header {
+            background: linear-gradient(135deg, #6B73FF 0%, #000DFF 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .user-section {
+            background: #f8f9fa;
+            padding: 20px 40px;
+            border-bottom: 2px solid #e9ecef;
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .user-input {
+            flex: 1;
+            min-width: 250px;
+        }
+
+        .user-input label {
+            display: block;
+            margin-bottom: 5px;
+            color: #495057;
+            font-weight: 600;
+        }
+
+        .user-input input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ced4da;
+            border-radius: 8px;
+            font-size: 1em;
+            transition: border-color 0.3s;
+        }
+
+        .user-input input:focus {
+            outline: none;
+            border-color: #6B73FF;
+        }
+
+        .user-button {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 8px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: background 0.3s;
+            font-weight: 600;
+        }
+
+        .user-button:hover {
+            background: #218838;
+        }
+
+        .level-selector {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            padding: 20px 40px;
+            background: #f1f3f5;
+            border-bottom: 2px solid #dee2e6;
+        }
+
+        .level-btn {
+            flex: 1;
+            min-width: 60px;
+            padding: 15px 10px;
+            border: none;
+            background: white;
+            color: #495057;
+            font-weight: bold;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: all 0.3s;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .level-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .level-btn.active {
+            background: linear-gradient(135deg, #6B73FF 0%, #000DFF 100%);
+            color: white;
+        }
+
+        .level-btn[data-level="0"] { border-left: 5px solid #dc3545; }
+        .level-btn[data-level="1"] { border-left: 5px solid #fd7e14; }
+        .level-btn[data-level="2"] { border-left: 5px solid #ffc107; }
+        .level-btn[data-level="3"] { border-left: 5px solid #28a745; }
+        .level-btn[data-level="4"] { border-left: 5px solid #17a2b8; }
+        .level-btn[data-level="5"] { border-left: 5px solid #6610f2; }
+
+        .content {
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .theory-section {
+            flex: 1;
+            min-width: 300px;
+            padding: 40px;
+            background: #f8f9fa;
+            border-right: 2px solid #e9ecef;
+        }
+
+        .questions-section {
+            flex: 2;
+            min-width: 400px;
+            padding: 40px;
+            background: white;
+        }
+
+        .design-section {
+            flex: 1;
+            min-width: 300px;
+            padding: 40px;
+            background: #f8f9fa;
+            border-left: 2px solid #e9ecef;
+        }
+
+        .level-title {
+            font-size: 2em;
+            margin-bottom: 30px;
+            color: #333;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .level-badge {
+            padding: 5px 15px;
+            border-radius: 25px;
+            font-size: 0.5em;
+            font-weight: normal;
+            background: #6c757d;
+            color: white;
+        }
+
+        .info-block {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+            border-left: 5px solid #6B73FF;
+        }
+
+        .info-title {
+            font-size: 1.3em;
+            color: #333;
+            margin-bottom: 15px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .info-title i {
+            color: #6B73FF;
+        }
+
+        .scrollable-text {
+            max-height: 200px;
+            overflow-y: auto;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #e9ecef;
+            line-height: 1.6;
+            color: #495057;
+        }
+
+        .scrollable-text p {
+            margin-bottom: 10px;
+        }
+
+        .scrollable-text::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .scrollable-text::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+
+        .scrollable-text::-webkit-scrollbar-thumb {
+            background: #6B73FF;
+            border-radius: 10px;
+        }
+
+        .key-points {
+            background: linear-gradient(135deg, #f5f7ff 0%, #eef0ff 100%);
+            border-radius: 10px;
+            padding: 20px;
+        }
+
+        .key-points-title {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 1.1em;
+        }
+
+        .key-points-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .key-points-list li {
+            padding: 10px 0 10px 30px;
+            position: relative;
+            border-bottom: 1px solid rgba(107, 115, 255, 0.2);
+            color: #495057;
+        }
+
+        .key-points-list li:last-child {
+            border-bottom: none;
+        }
+
+        .key-points-list li:before {
+            content: "🎯";
+            position: absolute;
+            left: 0;
+            color: #6B73FF;
+            font-size: 1.1em;
+        }
+
+        .question-item {
+            background: white;
+            border: 2px solid #e9ecef;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            transition: all 0.3s;
+        }
+
+        .question-item:hover {
+            border-color: #6B73FF;
+            box-shadow: 0 5px 20px rgba(107, 115, 255, 0.1);
+        }
+
+        .question-number {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #6B73FF;
+            margin-bottom: 10px;
+        }
+
+        .question-text {
+            font-size: 1.1em;
+            color: #333;
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+
+        .answer-input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #ced4da;
+            border-radius: 8px;
+            font-size: 1em;
+            margin: 10px 0;
+            resize: vertical;
+        }
+
+        .save-btn {
+            background: #6B73FF;
+            color: white;
+            border: none;
+            padding: 10px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.3s;
+            font-weight: 600;
+        }
+
+        .save-btn:hover {
+            background: #000DFF;
+        }
+
+        .design-box {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin-top: 20px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+        }
+
+        .design-title {
+            font-size: 1.3em;
+            color: #333;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+
+        .design-description {
+            color: #666;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .results-section {
+            padding: 40px;
+            background: #f1f3f5;
+            border-top: 2px solid #dee2e6;
+        }
+
+        .results-title {
+            font-size: 1.8em;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .results-filters {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+
+        .filter-select {
+            padding: 10px;
+            border: 2px solid #ced4da;
+            border-radius: 8px;
+            font-size: 1em;
+            min-width: 200px;
+        }
+
+        .results-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .result-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+
+        .result-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e9ecef;
+        }
+
+        .result-name {
+            font-weight: bold;
+            color: #333;
+        }
+
+        .result-level {
+            background: #6B73FF;
+            color: white;
+            padding: 3px 10px;
+            border-radius: 15px;
+            font-size: 0.9em;
+        }
+
+        .result-question {
+            color: #666;
+            margin-bottom: 10px;
+        }
+
+        .result-answer {
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 8px;
+            color: #333;
+        }
+
+        .status-message {
+            padding: 10px;
+            border-radius: 8px;
+            margin-top: 10px;
+            display: none;
+        }
+
+        .status-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .status-error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        /* Nieuwe stijlen voor resultaten */
+        .result-type-badge {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 15px;
+            font-size: 0.9em;
+            margin-bottom: 10px;
         }
         
-        // Sorteer op timestamp (nieuwste eerst)
-        allResults.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
-        
-        if (allResults.length === 0) {
-            resultsGrid.innerHTML = '<p>📭 Nog geen resultaten voor deze filters.</p>';
-            return;
+        .question-badge {
+            background: #e3f2fd;
+            color: #1976d2;
         }
         
-        // Toon resultaten met onderscheid tussen vragen en ontwerpen
-        resultsGrid.innerHTML = allResults.map(result => {
-            if (result.type === 'answer') {
-                // Weergave voor vraag-antwoord
-                return `
-                    <div class="result-card answer-card">
-                        <div class="result-header">
-                            <span class="result-name">${result.userId}</span>
-                            <span class="result-level">Niveau ${result.level}: ${result.levelName}</span>
-                        </div>
-                        <div class="result-type-badge question-badge">❓ Vraag ${result.questionIndex + 1}</div>
-                        <div class="result-question">
-                            <strong>Vraag:</strong><br>
-                            ${result.questionText}
-                        </div>
-                        <div class="result-answer">
-                            <strong>Antwoord:</strong><br>
-                            ${result.content || 'Geen antwoord'}
-                        </div>
-                        <small style="color: #999; display: block; margin-top: 10px;">
-                            🕐 ${new Date(result.timestamp).toLocaleString()}
-                        </small>
-                    </div>
-                `;
-            } else {
-                // Weergave voor ontwerpproduct
-                return `
-                    <div class="result-card design-card">
-                        <div class="result-header">
-                            <span class="result-name">${result.userId}</span>
-                            <span class="result-level">Niveau ${result.level}: ${result.levelName}</span>
-                        </div>
-                        <div class="result-type-badge design-badge">🎨 Ontwerpproduct</div>
-                        <div class="result-question">
-                            <strong>${result.designTitle}</strong>
-                        </div>
-                        <div class="result-answer design-content">
-                            <strong>Uitwerking:</strong><br>
-                            ${formatDesignContent(result.content)}
-                        </div>
-                        <small style="color: #999; display: block; margin-top: 10px;">
-                            🕐 ${new Date(result.timestamp).toLocaleString()}
-                        </small>
-                    </div>
-                `;
+        .design-badge {
+            background: #f3e5f5;
+            color: #7b1fa2;
+        }
+        
+        .answer-card {
+            border-left: 4px solid #1976d2;
+        }
+        
+        .design-card {
+            border-left: 4px solid #7b1fa2;
+        }
+        
+        .design-content-preview {
+            position: relative;
+        }
+        
+        .expand-btn {
+            background: none;
+            border: none;
+            color: #6B73FF;
+            cursor: pointer;
+            text-decoration: underline;
+            margin-left: 5px;
+            font-size: 0.9em;
+        }
+        
+        .expand-btn:hover {
+            color: #000DFF;
+        }
+        
+        .results-summary {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 25px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+        
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        .summary-item {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #6B73FF;
+        }
+        
+        .summary-answers {
+            color: #1976d2;
+            font-size: 0.9em;
+        }
+        
+        .summary-designs {
+            color: #7b1fa2;
+            font-size: 0.9em;
+        }
+
+        @media (max-width: 768px) {
+            .content {
+                flex-direction: column;
             }
-        }).join('');
-        
-        // Voeg een samenvatting toe bovenaan
-        addResultsSummary(allResults);
-        
-    }).catch(error => {
-        console.error('Error loading results:', error);
-        resultsGrid.innerHTML = '<p>❌ Fout bij laden van resultaten</p>';
-    });
-}
-
-function formatDesignContent(content) {
-    if (!content) return 'Geen uitwerking';
+            
+            .theory-section {
+                border-right: none;
+                border-bottom: 2px solid #e9ecef;
+            }
+            
+            .design-section {
+                border-left: none;
+                border-top: 2px solid #e9ecef;
+            }
+        }
+    </style>
     
-    // Als de content lang is, toon eerste 200 karakters met "lees meer" optie
-    if (content.length > 200) {
-        const shortContent = content.substring(0, 200) + '...';
-        return `
-            <div class="design-content-preview">
-                ${shortContent}
-                <button class="expand-btn" onclick="expandDesign(this)" data-fullcontent="${encodeURIComponent(content)}">Lees meer</button>
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🤖 AI in het Onderwijs</h1>
+            <p>Interactief werkboek - Van beginner tot expert (Niveau 0 → 5)</p>
+        </header>
+
+        <div class="user-section">
+            <div class="user-input">
+                <label for="userName">📝 Jouw naam</label>
+                <input type="text" id="userName" placeholder="Voer je naam in..." value="Docent">
             </div>
-            <div class="design-content-full" style="display:none;">${content}</div>
-        `;
-    }
-    return content;
-}
+            <button class="user-button" onclick="updateUser()">✅ Bevestig naam</button>
+        </div>
 
-function addResultsSummary(results) {
-    // Groepeer resultaten per gebruiker en niveau
-    const summary = {};
-    results.forEach(result => {
-        if (!summary[result.userId]) {
-            summary[result.userId] = {
-                answers: {},
-                designs: {}
-            };
-        }
-        
-        if (result.type === 'answer') {
-            if (!summary[result.userId].answers[result.level]) {
-                summary[result.userId].answers[result.level] = [];
-            }
-            summary[result.userId].answers[result.level].push(result.questionIndex);
-        } else {
-            summary[result.userId].designs[result.level] = true;
-        }
-    });
-    
-    // Maak een samenvatting bovenaan de resultaten
-    const summaryHTML = `
-        <div class="results-summary">
-            <h3>📊 Samenvatting per deelnemer</h3>
-            <div class="summary-grid">
-                ${Object.entries(summary).map(([user, data]) => `
-                    <div class="summary-item">
-                        <strong>${user}</strong><br>
-                        <span class="summary-answers">
-                            ✅ Vragen beantwoord: 
-                            ${Object.entries(data.answers).map(([level, questions]) => 
-                                `niv.${level} (${questions.length}/5)`
-                            ).join(', ') || 'Geen'}
-                        </span><br>
-                        <span class="summary-designs">
-                            🎨 Ontwerpen: 
-                            ${Object.keys(data.designs).map(level => 
-                                `niv.${level}`
-                            ).join(', ') || 'Geen'}
-                        </span>
-                    </div>
-                `).join('')}
+        <div class="level-selector" id="levelSelector">
+            <!-- Levels worden hier dynamisch gegenereerd -->
+        </div>
+
+        <div class="content">
+            <div class="theory-section" id="theorySection">
+                <!-- Theorie wordt hier dynamisch geladen -->
+            </div>
+
+            <div class="questions-section" id="questionsSection">
+                <!-- Vragen worden hier dynamisch geladen -->
+            </div>
+
+            <div class="design-section" id="designSection">
+                <!-- Ontwerpopdracht wordt hier dynamisch geladen -->
             </div>
         </div>
-    `;
-    
-    // Voeg de samenvatting toe boven de resultaten
-    const resultsSection = document.querySelector('.results-section');
-    const existingSummary = resultsSection.querySelector('.results-summary');
-    if (existingSummary) {
-        existingSummary.remove();
-    }
-    resultsSection.insertAdjacentHTML('afterbegin', summaryHTML);
-}
 
-function expandDesign(btn) {
-    const fullContent = decodeURIComponent(btn.dataset.fullcontent);
-    const preview = btn.closest('.design-content-preview');
-    preview.style.display = 'none';
-    
-    const full = btn.closest('.result-card').querySelector('.design-content-full');
-    full.style.display = 'block';
-    full.innerHTML = fullContent;
-}
+        <div class="results-section" id="resultsSection">
+            <h2 class="results-title">📊 Resultatenoverzicht</h2>
+            <div class="results-filters">
+                <select class="filter-select" id="filterLevel" onchange="loadResults()">
+                    <option value="all">Alle niveaus</option>
+                    <option value="0">Niveau 0</option>
+                    <option value="1">Niveau 1</option>
+                    <option value="2">Niveau 2</option>
+                    <option value="3">Niveau 3</option>
+                    <option value="4">Niveau 4</option>
+                    <option value="5">Niveau 5</option>
+                </select>
+                <select class="filter-select" id="filterUser" onchange="loadResults()">
+                    <option value="all">Alle deelnemers</option>
+                </select>
+            </div>
+            <div id="resultsGrid" class="results-grid">
+                <!-- Resultaten worden hier dynamisch geladen -->
+            </div>
+        </div>
+    </div>
 
-function loadLocalResults() {
-    const resultsGrid = document.getElementById('resultsGrid');
-    const localResults = [];
-    
-    // Haal alle lokale antwoorden en ontwerpen op
-    for (let i = 0; i < localStorage.length; i++) {
-        const key = localStorage.key(i);
-        
-        if (key.includes('_q')) {
-            // Dit is een antwoord
-            const parts = key.split('_');
-            const user = parts[0];
-            const levelQuestion = parts[1];
-            const level = levelQuestion.substring(1, 2);
-            const questionIndex = levelQuestion.substring(3);
-            
-            localResults.push({
-                type: 'answer',
-                user: user,
-                level: level,
-                questionIndex: questionIndex,
-                content: localStorage.getItem(key),
-                key: key
-            });
-        } else if (key.includes('_design_')) {
-            // Dit is een ontwerp
-            const parts = key.split('_');
-            const user = parts[0];
-            const level = parts[2];
-            
-            localResults.push({
-                type: 'design',
-                user: user,
-                level: level,
-                content: localStorage.getItem(key),
-                key: key
+    <script>
+        // Firebase configuratie - JOUW Spark database
+        const firebaseConfig = {
+            apiKey: "AIzaSyC_qP9Yyr5BGLvHVuUC4Tham4M0AwPEEJE",
+            authDomain: "opdrachtenboek-generatieve-ai.firebaseapp.com",
+            databaseURL: "https://opdrachtenboek-generatieve-ai-default-rtdb.europe-west1.firebasedatabase.app",
+            projectId: "opdrachtenboek-generatieve-ai",
+            storageBucket: "opdrachtenboek-generatieve-ai.firebasestorage.app",
+            messagingSenderId: "183622966071",
+            appId: "1:183622966071:web:aa58e8acb48cf9cec318b2"
+        };
+
+        // Initialize Firebase
+        let database;
+        try {
+            firebase.initializeApp(firebaseConfig);
+            database = firebase.database();
+            console.log("✅ Firebase Spark database verbonden!");
+        } catch (error) {
+            console.error("❌ Firebase init error:", error);
+        }
+
+        // Huidige gebruiker en niveau
+        let currentUser = localStorage.getItem('currentUser') || 'Docent';
+        let currentLevel = 0;
+        document.getElementById('userName').value = currentUser;
+
+        // Niveau definities met theorie, vragen en ontwerpopdrachten
+        const levels = [
+            {
+                level: 0,
+                name: "Beginner",
+                description: "Geen ervaring met AI",
+                theory: {
+                    text: `
+                        <p>AI, oftewel kunstmatige intelligentie, is een breed vakgebied binnen de computerwetenschappen dat zich richt op het creëren van systemen die taken kunnen uitvoeren waarvoor normaal gesproken menselijke intelligentie nodig is. Denk aan leren, redeneren, problemen oplossen, waarnemen en taalbegrip.</p>
+                        
+                        <p>In het onderwijs zien we AI steeds vaker terug in verschillende vormen. Van adaptieve leersystemen die zich aanpassen aan het niveau van de leerling, tot geautomatiseerde beoordeling van opdrachten. Ook tools als ChatGPT en andere generatieve AI worden steeds toegankelijker voor zowel docenten als leerlingen.</p>
+                        
+                        <p>Voor beginners is het belangrijk om eerst een basisbegrip te ontwikkelen van wat AI wel en niet is. AI is geen magie, maar een tool die getraind is op grote hoeveelheden data. Het kan patronen herkennen en voorspellingen doen, maar mist echt begrip en bewustzijn.</p>
+                        
+                        <p>Op dit niveau draait het om bewustwording en verkenning. Welke AI-tools bestaan er? Wat kunnen ze? En wat betekent dit mogelijk voor jouw onderwijspraktijk? Het is de basis waarop alle verdere ontwikkeling voortbouwt.</p>
+                    `,
+                    keyPoints: [
+                        "AI is een hulpmiddel, geen vervanging voor de docent",
+                        "Basisprincipes: AI leert van data en herkent patronen",
+                        "Bekende voorbeelden: ChatGPT, adaptieve leersystemen, vertaaltools",
+                        "AI kan administratieve taken verlichten",
+                        "Bewustwording is de eerste stap naar integratie"
+                    ]
+                },
+                questions: [
+                    "Wat is AI en hoe zou je het in één zin uitleggen aan een collega?",
+                    "Welke AI-tools heb je wel eens voorbij zien komen in het onderwijs?",
+                    "Wat zijn je grootste zorgen over het gebruik van AI in de klas?",
+                    "Hoe denk je dat AI momenteel wordt gebruikt in het onderwijs?",
+                    "Welke voordelen zou AI kunnen bieden voor jouw lessen?"
+                ],
+                designTask: {
+                    title: "🎯 Ontwerp: AI-verkenning",
+                    description: "Maak een mindmap van alle mogelijke toepassingen van AI in jouw vakgebied. Gebruik minimaal 10 verschillende ideeën en categoriseer ze."
+                }
+            },
+            {
+                level: 1,
+                name: "Ontdekker",
+                description: "Eerste ervaringen met AI",
+                theory: {
+                    text: `
+                        <p>Als ontdekker heb je de eerste stap gezet en ben je gaan experimenteren met AI-tools. Je hebt ervaren dat AI verrassend goed kan zijn in bepaalde taken, maar ook dat het fouten maakt en soms onzin uitkraamt (ook wel 'hallucineren' genoemd).</p>
+                        
+                        <p>Op dit niveau leer je de mogelijkheden en beperkingen van AI kennen. Je ontdekt dat de kwaliteit van de output sterk afhangt van de input: hoe beter je prompt, hoe beter het resultaat. Dit wordt 'prompt engineering' genoemd en is een belangrijke vaardigheid.</p>
+                        
+                        <p>Ethische vraagstukken worden ook zichtbaar. Hoe ga je om met privacy als leerlingen AI gebruiken? Wat als leerlingen AI inzetten om hun huiswerk te maken? Mag dat? En zo ja, onder welke voorwaarden?</p>
+                        
+                        <p>Het onderscheid tussen 'narrow AI' (gespecialiseerd in één taak) en 'general AI' (breed inzetbaar, bestaat nog niet) wordt duidelijker. Je leert dat huidige AI indrukwekkend is, maar ook zijn duidelijke grenzen heeft.</p>
+                    `,
+                    keyPoints: [
+                        "Prompt engineering: goede input = goede output",
+                        "AI kan hallucineren (foutieve informatie geven)",
+                        "Ethische vraagstukken worden zichtbaar",
+                        "Narrow AI vs General AI: begrijp het verschil",
+                        "Experimenteren staat centraal"
+                    ]
+                },
+                questions: [
+                    "Met welke AI-tool heb je recent geëxperimenteerd en wat was je ervaring?",
+                    "Hoe zou je ChatGPT kunnen inzetten bij je lesvoorbereiding?",
+                    "Welke ethische bezwaren zie je bij AI-gebruik door leerlingen?",
+                    "Wat is het verschil tussen narrow AI en general AI?",
+                    "Hoe betrouwbaar vind je de output van huidige AI-tools?"
+                ],
+                designTask: {
+                    title: "🤖 Ontwerp: Eerste AI-assistent",
+                    description: "Ontwerp een eenvoudige prompt-sjabloon voor een AI-assistent die jou helpt bij het maken van lesmateriaal. Maak 5 verschillende prompts voor verschillende doeleinden."
+                }
+            },
+            {
+                level: 2,
+                name: "Gebruiker",
+                description: "Regelmatig AI-gebruik",
+                theory: {
+                    text: `
+                        <p>Als gevorderde gebruiker heb je AI geïntegreerd in je dagelijkse praktijk. Je gebruikt het niet alleen voor experimenten, maar voor concrete taken. Je hebt ontdekt welke tools het beste werken voor welke doeleinden en je hebt routines ontwikkeld.</p>
+                        
+                        <p>Op dit niveau wordt het belangrijk om richtlijnen te ontwikkelen voor AI-gebruik. Hoe zorg je dat leerlingen op een verantwoorde manier met AI omgaan? Welke afspraken maak je over het gebruik bij toetsen en opdrachten? Hoe voorkom je dat leerlingen klakkeloos AI-antwoorden overnemen?</p>
+                        
+                        <p>Je leert ook kritisch te kijken naar AI-output. Niet alles wat AI produceert is juist of geschikt. Je ontwikkelt een 'kritische blik' en leert hoe je AI-resultaten kunt controleren en verbeteren.</p>
+                        
+                        <p>Daarnaast ontdek je dat AI je kan helpen bij differentiatie: het aanpassen van lesmateriaal aan verschillende niveaus binnen één klas. Dit is een krachtige toepassing die je als docent veel tijd kan besparen.</p>
+                    `,
+                    keyPoints: [
+                        "AI is onderdeel van je dagelijkse praktijk",
+                        "Ontwikkel duidelijke richtlijnen voor leerlingen",
+                        "Kritische blik op AI-output is essentieel",
+                        "AI ondersteunt bij differentiatie",
+                        "Tijdsbesparing wordt merkbaar"
+                    ]
+                },
+                questions: [
+                    "Hoe integreer je AI nu concreet in je lespraktijk?",
+                    "Welke richtlijnen heb je opgesteld voor AI-gebruik door leerlingen?",
+                    "Hoe ga je om met AI-gegenereerde antwoorden bij toetsen?",
+                    "Welke AI-tool vind je het meest waardevol en waarom?",
+                    "Hoe zorg je voor kritisch denken bij AI-uitkomsten?"
+                ],
+                designTask: {
+                    title: "📚 Ontwerp: Lesintegratie",
+                    description: "Ontwikkel een complete les van 50 minuten waarin leerlingen op een verantwoorde manier AI gebruiken. Beschrijf leerdoelen, werkvormen en evaluatie."
+                }
+            },
+            {
+                level: 3,
+                name: "Integrator",
+                description: "AI structureel inzetten",
+                theory: {
+                    text: `
+                        <p>Als integrator gebruik je AI niet alleen incidenteel, maar structureel en doordacht. Je hebt een visie ontwikkeld op hoe AI jouw onderwijs kan versterken en je past dit consequent toe. Je bent in staat om AI in te zetten voor complexe taken en ziet mogelijkheden die anderen missen.</p>
+                        
+                        <p>Op dit niveau ga je ook je collega's ondersteunen. Je deelt je kennis, helpt anderen op weg en draagt bij aan de professionele ontwikkeling van je team. Je wordt gezien als een aanspreekpunt voor AI-vragen binnen je school.</p>
+                        
+                        <p>Je ontwikkelt gestandaardiseerde werkwijzen en sjablonen die je met anderen deelt. Je denkt na over hoe AI structureel ingebed kan worden in het curriculum en in de schoolorganisatie.</p>
+                        
+                        <p>Ook meet je de effectiviteit van AI-toepassingen. Werkt het echt? Leerden leerlingen beter of sneller? Bespaarde het tijd? Je verzamelt data en gebruikt die om je aanpak te verbeteren.</p>
+                    `,
+                    keyPoints: [
+                        "Structurele en doordachte inzet van AI",
+                        "Je begeleidt en inspireert collega's",
+                        "Ontwikkeling van gestandaardiseerde werkwijzen",
+                        "Meten van effectiviteit",
+                        "AI wordt onderdeel van de schoolcultuur"
+                    ]
+                },
+                questions: [
+                    "Hoe differentieer je met AI in je lessen voor verschillende niveaus?",
+                    "Welke professionele taken heb je geautomatiseerd met AI?",
+                    "Hoe begeleid je collega's bij het starten met AI?",
+                    "Wat zijn de beste prompts die je hebt ontwikkeld?",
+                    "Hoe meet je de effectiviteit van AI in je onderwijs?"
+                ],
+                designTask: {
+                    title: "⚙️ Ontwerp: AI-werkwijze",
+                    description: "Creëer een gestandaardiseerde werkwijze voor AI-gebruik in jouw vakgroep. Ontwikkel een stappenplan, richtlijnen en evaluatieformulier."
+                }
+            },
+            {
+                level: 4,
+                name: "Expert",
+                description: "AI als tweede natuur",
+                theory: {
+                    text: `
+                        <p>Als expert is AI voor jou 'tweede natuur' geworden. Je zet het intuïtief en vloeiend in, zonder er bewust bij na te denken. Je hebt een diepgaand begrip van verschillende AI-tools en weet precies welke tool voor welke taak geschikt is.</p>
+                        
+                        <p>Op dit niveau combineer je verschillende AI-tools voor optimale resultaten. Je creëert workflows waarin meerdere AI-systemen samenwerken, zoals het gebruik van ChatGPT voor tekst, Midjourney voor beeld en ElevenLabs voor spraak in één project.</p>
+                        
+                        <p>Je bent ook in staat om AI aan te passen aan specifieke leerbehoeften. Je ontwikkelt custom prompts, finetuned modellen voor jouw context, of bouwt eenvoudige AI-oplossingen met bestaande tools en API's.</p>
+                        
+                        <p>Je signaleert de limitaties van huidige AI en denkt na over hoe deze in de toekomst opgelost kunnen worden. Je draagt actief bij aan AI-beleid op school en denkt mee over de lange termijn strategie.</p>
+                    `,
+                    keyPoints: [
+                        "AI-gebruik is intuïtief en vloeiend",
+                        "Combinatie van meerdere AI-tools",
+                        "Ontwikkeling van maatwerkoplossingen",
+                        "Signaleren van limitaties en kansen",
+                        "Bijdrage aan schoolbreed AI-beleid"
+                    ]
+                },
+                questions: [
+                    "Hoe pas je AI aan voor specifieke leerbehoeften van studenten?",
+                    "Welke innovatieve toepassingen van AI heb je ontwikkeld?",
+                    "Hoe combineer je meerdere AI-tools voor optimaal resultaat?",
+                    "Wat zijn de limitaties van huidige AI in jouw onderwijspraktijk?",
+                    "Hoe draag je bij aan AI-beleid op school?"
+                ],
+                designTask: {
+                    title: "🚀 Ontwerp: Innovatieproject",
+                    description: "Ontwerp een innovatief AI-project voor jouw school dat minimaal 3 verschillende AI-tools combineert en een concreet onderwijsprobleem oplost."
+                }
+            },
+            {
+                level: 5,
+                name: "Master",
+                description: "AI-expert en vernieuwer",
+                theory: {
+                    text: `
+                        <p>Als master ben je niet alleen expert gebruiker, maar ook vernieuwer en visionair. Je ontwikkelt zelf AI-oplossingen voor het onderwijs, bijvoorbeeld door het bouwen van custom tools, het trainen van modellen of het ontwikkelen van nieuwe toepassingen.</p>
+                        
+                        <p>Op dit niveau heb je een heldere visie op de toekomst van AI in het onderwijs. Je kunt deze visie verwoorden, onderbouwen en anderen enthousiasmeren. Je denkt na over de impact van AI op de lange termijn: hoe ziet het onderwijs er over 5 of 10 jaar uit?</p>
+                        
+                        <p>Je begeleidt niet alleen je eigen school, maar ook andere scholen en organisaties bij AI-implementatie. Je deelt je kennis via presentaties, workshops of publicaties en draagt bij aan de bredere ontwikkeling van het onderwijsveld.</p>
+                        
+                        <p>Je houdt de nieuwste ontwikkelingen in AI scherp in de gaten en vertaalt deze naar de onderwijspraktijk. Je waarborgt kwaliteit en ethiek bij AI-gebruik en denkt na over verantwoorde innovatie. Je bent een thought leader op dit gebied.</p>
+                    `,
+                    keyPoints: [
+                        "Ontwikkeling van eigen AI-oplossingen",
+                        "Helder toekomstvisie op AI in onderwijs",
+                        "Begeleiding van andere scholen",
+                        "Kennis delen via presentaties en publicaties",
+                        "Borging van kwaliteit en ethiek"
+                    ]
+                },
+                questions: [
+                    "Hoe ontwikkel je zelf AI-oplossingen voor het onderwijs?",
+                    "Welke visie heb je op AI in het onderwijs over 5 jaar?",
+                    "Hoe begeleid je andere scholen bij AI-implementatie?",
+                    "Wat zijn de nieuwste AI-ontwikkelingen die relevant zijn?",
+                    "Hoe waarborg je kwaliteit en ethiek bij AI-gebruik?"
+                ],
+                designTask: {
+                    title: "🌟 Ontwerp: AI-visie & Strategie",
+                    description: "Ontwikkel een complete AI-visie en implementatiestrategie voor jouw school. Werk dit uit in een plan voor de komende 3 jaar met concrete mijlpalen."
+                }
+            }
+        ];
+
+        // Initialize
+        document.getElementById('userName').value = currentUser;
+        renderLevelSelector();
+        renderLevel(currentLevel);
+        loadResults();
+        updateUserFilter();
+
+        function renderLevelSelector() {
+            const selector = document.getElementById('levelSelector');
+            selector.innerHTML = '';
+            levels.forEach(level => {
+                const btn = document.createElement('button');
+                btn.className = `level-btn ${currentLevel === level.level ? 'active' : ''}`;
+                btn.setAttribute('data-level', level.level);
+                btn.innerHTML = `Niveau ${level.level}<br><small>${level.name}</small>`;
+                btn.onclick = () => selectLevel(level.level);
+                selector.appendChild(btn);
             });
         }
-    }
-    
-    if (localResults.length === 0) {
-        resultsGrid.innerHTML = '<p>📭 Nog geen lokale resultaten.</p>';
-        return;
-    }
-    
-    resultsGrid.innerHTML = localResults.map(result => {
-        if (result.type === 'answer') {
-            return `
-                <div class="result-card answer-card">
-                    <div class="result-header">
-                        <span class="result-name">${result.user}</span>
-                        <span class="result-level">Niveau ${result.level}</span>
+
+        function selectLevel(level) {
+            currentLevel = level;
+            renderLevelSelector();
+            renderLevel(level);
+        }
+
+        function renderLevel(level) {
+            const levelData = levels[level];
+            
+            // Render theorie
+            const theorySection = document.getElementById('theorySection');
+            theorySection.innerHTML = `
+                <div class="info-block">
+                    <div class="info-title">
+                        <i>📚</i> Theorie: Niveau ${level} - ${levelData.name}
                     </div>
-                    <div class="result-type-badge question-badge">❓ Vraag ${parseInt(result.questionIndex) + 1}</div>
-                    <div class="result-answer">
-                        <strong>Lokaal antwoord:</strong><br>
-                        ${result.content.substring(0, 150)}${result.content.length > 150 ? '...' : ''}
+                    <div class="scrollable-text">
+                        ${levelData.theory.text}
+                    </div>
+                    <div class="key-points">
+                        <div class="key-points-title">🎯 Kernpunten voor dit niveau:</div>
+                        <ul class="key-points-list">
+                            ${levelData.theory.keyPoints.map(point => `<li>${point}</li>`).join('')}
+                        </ul>
                     </div>
                 </div>
             `;
-        } else {
-            return `
-                <div class="result-card design-card">
-                    <div class="result-header">
-                        <span class="result-name">${result.user}</span>
-                        <span class="result-level">Niveau ${result.level}</span>
+
+            // Render vragen
+            const questionsSection = document.getElementById('questionsSection');
+            questionsSection.innerHTML = `
+                <div class="level-title">
+                    Niveau ${level}: ${levelData.name}
+                    <span class="level-badge">${levelData.description}</span>
+                </div>
+            `;
+
+            levelData.questions.forEach((question, index) => {
+                const questionId = `q${level}_${index}`;
+                const savedAnswer = localStorage.getItem(`${currentUser}_${questionId}`) || '';
+                
+                questionsSection.innerHTML += `
+                    <div class="question-item" id="question-${level}-${index}">
+                        <div class="question-number">Vraag ${index + 1}/5</div>
+                        <div class="question-text">${question}</div>
+                        <textarea class="answer-input" id="input-${level}-${index}" placeholder="Jouw antwoord..." rows="3">${savedAnswer}</textarea>
+                        <button class="save-btn" onclick="saveAnswer(${level}, ${index})">💾 Antwoord opslaan</button>
+                        <div id="status-${level}-${index}" class="status-message"></div>
                     </div>
-                    <div class="result-type-badge design-badge">🎨 Lokaal ontwerp</div>
-                    <div class="result-answer">
-                        <strong>Ontwerp (lokaal):</strong><br>
-                        ${result.content.substring(0, 150)}${result.content.length > 150 ? '...' : ''}
-                    </div>
+                `;
+            });
+
+            // Render ontwerpopdracht
+            const designSection = document.getElementById('designSection');
+            const savedDesign = localStorage.getItem(`${currentUser}_design_${level}`) || '';
+            
+            designSection.innerHTML = `
+                <h2>${levelData.designTask.title}</h2>
+                <div class="design-box">
+                    <div class="design-description">${levelData.designTask.description}</div>
+                    <textarea class="answer-input" id="design-${level}" placeholder="Werk hier je ontwerp uit..." rows="10">${savedDesign}</textarea>
+                    <button class="save-btn" onclick="saveDesign(${level})">💾 Ontwerp opslaan</button>
+                    <div id="status-design-${level}" class="status-message"></div>
                 </div>
             `;
         }
-    }).join('');
-}
 
-// Voeg deze CSS toe aan de style sectie voor de nieuwe elementen
-const styleToAdd = `
-    .result-type-badge {
-        display: inline-block;
-        padding: 3px 10px;
-        border-radius: 15px;
-        font-size: 0.9em;
-        margin-bottom: 10px;
-    }
-    
-    .question-badge {
-        background: #e3f2fd;
-        color: #1976d2;
-    }
-    
-    .design-badge {
-        background: #f3e5f5;
-        color: #7b1fa2;
-    }
-    
-    .answer-card {
-        border-left: 4px solid #1976d2;
-    }
-    
-    .design-card {
-        border-left: 4px solid #7b1fa2;
-    }
-    
-    .design-content-preview {
-        position: relative;
-    }
-    
-    .expand-btn {
-        background: none;
-        border: none;
-        color: #6B73FF;
-        cursor: pointer;
-        text-decoration: underline;
-        margin-left: 5px;
-    }
-    
-    .expand-btn:hover {
-        color: #000DFF;
-    }
-    
-    .results-summary {
-        background: white;
-        border-radius: 12px;
-        padding: 20px;
-        margin-bottom: 25px;
-        box-shadow: 0 3px 10px rgba(0,0,0,0.1);
-    }
-    
-    .summary-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-        gap: 15px;
-        margin-top: 15px;
-    }
-    
-    .summary-item {
-        background: #f8f9fa;
-        padding: 15px;
-        border-radius: 8px;
-        border-left: 4px solid #6B73FF;
-    }
-    
-    .summary-answers {
-        color: #1976d2;
-        font-size: 0.9em;
-    }
-    
-    .summary-designs {
-        color: #7b1fa2;
-        font-size: 0.9em;
-    }
-`;
+        function saveAnswer(level, questionIndex) {
+            const input = document.getElementById(`input-${level}-${questionIndex}`);
+            const answer = input.value;
+            const questionId = `q${level}_${questionIndex}`;
+            
+            localStorage.setItem(`${currentUser}_${questionId}`, answer);
+            
+            if (database) {
+                const answerData = {
+                    userId: currentUser,
+                    level: level,
+                    questionIndex: questionIndex,
+                    answer: answer,
+                    timestamp: new Date().toISOString()
+                };
+                
+                database.ref('answers/' + currentUser + '_' + questionId).set(answerData)
+                    .then(() => {
+                        showStatus(`status-${level}-${questionIndex}`, '✅ Antwoord opgeslagen in Firebase!', 'success');
+                        loadResults();
+                    })
+                    .catch(error => {
+                        console.error('Firebase error:', error);
+                        showStatus(`status-${level}-${questionIndex}`, '❌ Fout bij opslaan in database, maar lokaal opgeslagen', 'error');
+                    });
+            } else {
+                showStatus(`status-${level}-${questionIndex}`, '✅ Antwoord lokaal opgeslagen (geen database)', 'success');
+            }
+        }
 
-// Voeg de CSS toe aan het bestaande style element
-document.head.insertAdjacentHTML('beforeend', `<style>${styleToAdd}</style>`);
+        function saveDesign(level) {
+            const input = document.getElementById(`design-${level}`);
+            const design = input.value;
+            
+            localStorage.setItem(`${currentUser}_design_${level}`, design);
+            
+            if (database) {
+                const designData = {
+                    userId: currentUser,
+                    level: level,
+                    design: design,
+                    timestamp: new Date().toISOString()
+                };
+                
+                database.ref('designs/' + currentUser + '_' + level).set(designData)
+                    .then(() => {
+                        showStatus(`status-design-${level}`, '✅ Ontwerp opgeslagen in Firebase!', 'success');
+                        loadResults();
+                    })
+                    .catch(error => {
+                        console.error('Firebase error:', error);
+                        showStatus(`status-design-${level}`, '❌ Fout bij opslaan in database, maar lokaal opgeslagen', 'error');
+                    });
+            } else {
+                showStatus(`status-design-${level}`, '✅ Ontwerp lokaal opgeslagen (geen database)', 'success');
+            }
+        }
+
+        function showStatus(elementId, message, type) {
+            const statusEl = document.getElementById(elementId);
+            statusEl.textContent = message;
+            statusEl.className = `status-message status-${type}`;
+            statusEl.style.display = 'block';
+            
+            setTimeout(() => {
+                statusEl.style.display = 'none';
+            }, 3000);
+        }
+
+        function updateUser() {
+            const newUser = document.getElementById('userName').value.trim();
+            if (newUser) {
+                currentUser = newUser;
+                localStorage.setItem('currentUser', currentUser);
+                renderLevel(currentLevel);
+                updateUserFilter();
+                loadResults();
+                alert(`✅ Gebruiker gewijzigd naar: ${currentUser}`);
+            }
+        }
+
+        function updateUserFilter() {
+            const filterUser = document.getElementById('filterUser');
+            if (!database) return;
+            
+            database.ref('answers').once('value', (snapshot) => {
+                const answers = snapshot.val() || {};
+                const users = new Set();
+                
+                Object.values(answers).forEach(answer => {
+                    if (answer.userId) users.add(answer.userId);
+                });
+                
+                filterUser.innerHTML = '<option value="all">Alle deelnemers</option>';
+                users.forEach(user => {
+                    filterUser.innerHTML += `<option value="${user}">${user}</option>`;
+                });
+            });
+        }
+
+        function loadResults() {
+            const resultsGrid = document.getElementById('resultsGrid');
+            const filterLevel = document.getElementById('filterLevel').value;
+            const filterUser = document.getElementById('filterUser').value;
+            
+            if (!database) {
+                resultsGrid.innerHTML = '<p>⚠️ Database niet verbonden. Toon lokale resultaten...</p>';
+                loadLocalResults();
+                return;
+            }
+            
+            Promise.all([
+                database.ref('answers').once('value'),
+                database.ref('designs').once('value')
+            ]).then(([answersSnapshot, designsSnapshot]) => {
+                const answers = answersSnapshot.val() || {};
+                const designs = designsSnapshot.val() || {};
+                
+                let allResults = [];
+                
+                Object.values(answers).forEach(answer => {
+                    allResults.push({
+                        type: 'answer',
+                        userId: answer.userId,
+                        level: answer.level,
+                        questionIndex: answer.questionIndex,
+                        questionText: levels[answer.level]?.questions[answer.questionIndex] || 'Vraag niet gevonden',
+                        content: answer.answer,
+                        timestamp: answer.timestamp,
+                        levelName: levels[answer.level]?.name || 'Onbekend'
+                    });
+                });
+                
+                Object.values(designs).forEach(design => {
+                    allResults.push({
+                        type: 'design',
+                        userId: design.userId,
+                        level: design.level,
+                        designTitle: levels[design.level]?.designTask.title || 'Ontwerpopdracht',
+                        content: design.design,
+                        timestamp: design.timestamp,
+                        levelName: levels[design.level]?.name || 'Onbekend'
+                    });
+                });
+                
+                if (filterLevel !== 'all') {
+                    allResults = allResults.filter(r => r.level == filterLevel);
+                }
+                if (filterUser !== 'all') {
+                    allResults = allResults.filter(r => r.userId === filterUser);
+                }
+                
+                allResults.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+                
+                if (allResults.length === 0) {
+                    resultsGrid.innerHTML = '<p>📭 Nog geen resultaten voor deze filters.</p>';
+                    return;
+                }
+                
+                resultsGrid.innerHTML = allResults.map(result => {
+                    if (result.type === 'answer') {
+                        return `
+                            <div class="result-card answer-card">
+                                <div class="result-header">
+                                    <span class="result-name">${result.userId}</span>
+                                    <span class="result-level">Niveau ${result.level}: ${result.levelName}</span>
+                                </div>
+                                <div class="result-type-badge question-badge">❓ Vraag ${result.questionIndex + 1}</div>
+                                <div class="result-question">
+                                    <strong>Vraag:</strong><br>
+                                    ${result.questionText}
+                                </div>
+                                <div class="result-answer">
+                                    <strong>Antwoord:</strong><br>
+                                    ${result.content || 'Geen antwoord'}
+                                </div>
+                                <small style="color: #999; display: block; margin-top: 10px;">
+                                    🕐 ${new Date(result.timestamp).toLocaleString()}
+                                </small>
+                            </div>
+                        `;
+                    } else {
+                        return `
+                            <div class="result-card design-card">
+                                <div class="result-header">
+                                    <span class="result-name">${result.userId}</span>
+                                    <span class="result-level">Niveau ${result.level}: ${result.levelName}</span>
+                                </div>
+                                <div class="result-type-badge design-badge">🎨 Ontwerpproduct</div>
+                                <div class="result-question">
+                                    <strong>${result.designTitle}</strong>
+                                </div>
+                                <div class="result-answer">
+                                    <strong>Uitwerking:</strong><br>
+                                    ${formatDesignContent(result.content)}
+                                </div>
+                                <small style="color: #999; display: block; margin-top: 10px;">
+                                    🕐 ${new Date(result.timestamp).toLocaleString()}
+                                </small>
+                            </div>
+                        `;
+                    }
+                }).join('');
+                
+                addResultsSummary(allResults);
+                
+            }).catch(error => {
+                console.error('Error loading results:', error);
+                resultsGrid.innerHTML = '<p>❌ Fout bij laden van resultaten</p>';
+            });
+        }
+
+        function formatDesignContent(content) {
+            if (!content) return 'Geen uitwerking';
+            if (content.length > 200) {
+                const shortContent = content.substring(0, 200) + '...';
+                return `
+                    <div class="design-content-preview">
+                        ${shortContent}
+                        <button class="expand-btn" onclick="expandDesign(this)" data-fullcontent="${encodeURIComponent(content)}">Lees meer</button>
+                    </div>
+                    <div class="design-content-full" style="display:none;">${content}</div>
+                `;
+            }
+            return content;
+        }
+
+        function expandDesign(btn) {
+            const fullContent = decodeURIComponent(btn.dataset.fullcontent);
+            const preview = btn.closest('.design-content-preview');
+            preview.style.display = 'none';
+            const full = btn.closest('.result-card').querySelector('.design-content-full');
+            full.style.display = 'block';
+        }
+
+        function addResultsSummary(results) {
+            const summary = {};
+            results.forEach(result => {
+                if (!summary[result.userId]) {
+                    summary[result.userId] = {
+                        answers: {},
+                        designs: {}
+                    };
+                }
+                
+                if (result.type === 'answer') {
+                    if (!summary[result.userId].answers[result.level]) {
+                        summary[result.userId].answers[result.level] = [];
+                    }
+                    summary[result.userId].answers[result.level].push(result.questionIndex);
+                } else {
+                    summary[result.userId].designs[result.level] = true;
+                }
+            });
+            
+            const summaryHTML = `
+                <div class="results-summary">
+                    <h3>📊 Samenvatting per deelnemer</h3>
+                    <div class="summary-grid">
+                        ${Object.entries(summary).map(([user, data]) => `
+                            <div class="summary-item">
+                                <strong>${user}</strong><br>
+                                <span class="summary-answers">
+                                    ✅ Vragen beantwoord: 
+                                    ${Object.entries(data.answers).map(([level, questions]) => 
+                                        `niv.${level} (${questions.length}/5)`
+                                    ).join(', ') || 'Geen'}
+                                </span><br>
+                                <span class="summary-designs">
+                                    🎨 Ontwerpen: 
+                                    ${Object.keys(data.designs).map(level => 
+                                        `niv.${level}`
+                                    ).join(', ') || 'Geen'}
+                                </span>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+            
+            const resultsSection = document.querySelector('.results-section');
+            const existingSummary = resultsSection.querySelector('.results-summary');
+            if (existingSummary) {
+                existingSummary.remove();
+            }
+            resultsSection.insertAdjacentHTML('afterbegin', summaryHTML);
+        }
+
+        function loadLocalResults() {
+            const resultsGrid = document.getElementById('resultsGrid');
+            const localResults = [];
+            
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                
+                if (key.includes('_q')) {
+                    const parts = key.split('_');
+                    const user = parts[0];
+                    const levelQuestion = parts[1];
+                    const level = levelQuestion.substring(1, 2);
+                    const questionIndex = levelQuestion.substring(3);
+                    
+                    localResults.push({
+                        type: 'answer',
+                        user: user,
+                        level: level,
+                        questionIndex: questionIndex,
+                        content: localStorage.getItem(key),
+                        key: key
+                    });
+                } else if (key.includes('_design_')) {
+                    const parts = key.split('_');
+                    const user = parts[0];
+                    const level = parts[2];
+                    
+                    localResults.push({
+                        type: 'design',
+                        user: user,
+                        level: level,
+                        content: localStorage.getItem(key),
+                        key: key
+                    });
+                }
+            }
+            
+            if (localResults.length === 0) {
+                resultsGrid.innerHTML = '<p>📭 Nog geen lokale resultaten.</p>';
+                return;
+            }
+            
+            resultsGrid.innerHTML = localResults.map(result => {
+                if (result.type === 'answer') {
+                    return `
+                        <div class="result-card answer-card">
+                            <div class="result-header">
+                                <span class="result-name">${result.user}</span>
+                                <span class="result-level">Niveau ${result.level}</span>
+                            </div>
+                            <div class="result-type-badge question-badge">❓ Vraag ${parseInt(result.questionIndex) + 1}</div>
+                            <div class="result-answer">
+                                <strong>Lokaal antwoord:</strong><br>
+                                ${result.content.substring(0, 150)}${result.content.length > 150 ? '...' : ''}
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    return `
+                        <div class="result-card design-card">
+                            <div class="result-header">
+                                <span class="result-name">${result.user}</span>
+                                <span class="result-level">Niveau ${result.level}</span>
+                            </div>
+                            <div class="result-type-badge design-badge">🎨 Lokaal ontwerp</div>
+                            <div class="result-answer">
+                                <strong>Ontwerp (lokaal):</strong><br>
+                                ${result.content.substring(0, 150)}${result.content.length > 150 ? '...' : ''}
+                            </div>
+                        </div>
+                    `;
+                }
+            }).join('');
+        }
+    </script>
+</body>
+</html>
