@@ -12,7 +12,7 @@
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Segoe UI', 'Arial', sans-serif;
             background: #0a1a2b;
             min-height: 100vh;
             padding: 20px;
@@ -40,12 +40,15 @@
             font-size: 2.5em;
             margin-bottom: 10px;
             color: #c9a959;
+            font-weight: 500;
+            letter-spacing: 1px;
         }
 
         header p {
             font-size: 1.2em;
             opacity: 0.9;
             color: #ffffff;
+            font-weight: 300;
         }
 
         .user-section {
@@ -68,6 +71,9 @@
             margin-bottom: 5px;
             color: #0a1a2b;
             font-weight: 600;
+            font-size: 0.9em;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         .user-input input {
@@ -94,6 +100,8 @@
             cursor: pointer;
             transition: all 0.3s;
             font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         .user-button:hover {
@@ -117,13 +125,15 @@
             border: none;
             background: white;
             color: #0a1a2b;
-            font-weight: bold;
+            font-weight: 600;
             font-size: 1.1em;
             cursor: pointer;
             transition: all 0.3s;
             border-radius: 8px;
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
             border: 1px solid #c9a959;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         .level-btn:hover {
@@ -181,6 +191,9 @@
             display: flex;
             align-items: center;
             gap: 15px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
         .level-badge {
@@ -209,8 +222,10 @@
             color: #c9a959;
             padding: 15px 25px;
             font-size: 1.2em;
-            font-weight: bold;
+            font-weight: 600;
             border-bottom: 2px solid #c9a959;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         .theory-content {
@@ -271,6 +286,8 @@
             cursor: pointer;
             font-size: 0.9em;
             transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         .theory-btn:hover {
@@ -287,12 +304,16 @@
             border-radius: 8px;
             color: #b71c1c;
             font-weight: 500;
+            border: 1px solid #d32f2f;
         }
 
         .police-warning h4 {
             color: #d32f2f;
             margin-bottom: 10px;
             font-size: 1.1em;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         .police-warning ul {
@@ -304,19 +325,21 @@
         }
 
         .key-points {
-            background: linear-gradient(135deg, #f8f4e8 0%, #f0e8d8 100%);
+            background: #f8f4e8;
             border-radius: 10px;
             padding: 20px;
             border-left: 4px solid #c9a959;
         }
 
         .key-points-title {
-            font-weight: bold;
+            font-weight: 700;
             color: #0a1a2b;
             margin-bottom: 15px;
             font-size: 1.1em;
             border-bottom: 1px solid #c9a959;
             padding-bottom: 5px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         .key-points-list {
@@ -336,11 +359,10 @@
         }
 
         .key-points-list li:before {
-            content: "•";
+            content: "—";
             position: absolute;
             left: 0;
             color: #c9a959;
-            font-size: 1.5em;
             font-weight: bold;
         }
 
@@ -354,12 +376,14 @@
         }
 
         .materials-title {
-            font-weight: bold;
+            font-weight: 700;
             color: #0a1a2b;
             margin-bottom: 15px;
             font-size: 1.1em;
             border-bottom: 1px solid #c9a959;
             padding-bottom: 5px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         .materials-list {
@@ -387,11 +411,12 @@
             font-weight: 500;
             transition: color 0.3s;
             word-break: break-all;
+            border-bottom: 1px dotted transparent;
         }
 
         .materials-list a:hover {
             color: #c9a959;
-            text-decoration: underline;
+            border-bottom: 1px dotted #c9a959;
         }
 
         .materials-list .pdf-link {
@@ -400,6 +425,7 @@
             border-radius: 5px;
             display: inline-block;
             border-left: 3px solid #c9a959;
+            font-family: monospace;
         }
 
         .question-item {
@@ -418,11 +444,13 @@
 
         .question-number {
             font-size: 1.2em;
-            font-weight: bold;
+            font-weight: 700;
             color: #0a1a2b;
             margin-bottom: 10px;
             border-bottom: 1px solid #c9a959;
             padding-bottom: 5px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         .question-text {
@@ -441,6 +469,7 @@
             margin: 10px 0;
             resize: vertical;
             background: #f8f9fa;
+            font-family: inherit;
         }
 
         .answer-input:focus {
@@ -457,6 +486,8 @@
             cursor: pointer;
             transition: all 0.3s;
             font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         .save-btn:hover {
@@ -467,30 +498,33 @@
         .mindmap-editor {
             background: #ffffff;
             border-radius: 15px;
-            padding: 25px;
-            margin: 20px 0;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
-            border: 2px solid #c9a959;
+            padding: 15px;  /* Verkleind van 25px naar 15px */
+            margin: 15px 0;  /* Verkleind van 20px naar 15px */
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);  /* Minder schaduw */
+            border: 1px solid #c9a959;  /* Dunnere border */
         }
 
         .mindmap-tools {
             display: flex;
-            gap: 15px;
-            margin-bottom: 20px;
+            gap: 8px;  /* Verkleind van 15px naar 8px */
+            margin-bottom: 12px;  /* Verkleind van 20px naar 12px */
             flex-wrap: wrap;
-            padding-bottom: 15px;
+            padding-bottom: 10px;  /* Verkleind van 15px naar 10px */
             border-bottom: 1px solid #c9a959;
         }
 
         .mindmap-tool-btn {
             background: #f0f0f0;
-            border: 2px solid #c9a959;
+            border: 1px solid #c9a959;  /* Dunnere border */
             color: #0a1a2b;
-            padding: 10px 20px;
-            border-radius: 5px;
+            padding: 5px 12px;  /* Forse verkleining: was 10px 20px */
+            border-radius: 4px;  /* Kleinere radius */
             cursor: pointer;
             font-weight: 600;
+            font-size: 0.8em;  /* Kleinere font */
             transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         .mindmap-tool-btn:hover {
@@ -499,43 +533,45 @@
         }
 
         .mindmap-canvas {
-            min-height: 400px;
+            min-height: 250px;  /* Verkleind van 400px naar 250px */
             background: #f8f9fa;
-            border: 2px dashed #c9a959;
-            border-radius: 10px;
-            padding: 30px;
+            border: 1px dashed #c9a959;  /* Dunnere border */
+            border-radius: 6px;  /* Kleinere radius */
+            padding: 15px;  /* Verkleind van 30px naar 15px */
             position: relative;
-            margin-bottom: 20px;
+            margin-bottom: 12px;  /* Verkleind van 20px naar 12px */
             display: flex;
             flex-direction: column;
             align-items: center;
         }
 
         .central-concept {
-            width: 180px;
-            height: 180px;
+            width: 100px;  /* Verkleind van 180px naar 100px */
+            height: 100px;  /* Verkleind van 180px naar 100px */
             background: #0a1a2b;
-            border: 3px solid #c9a959;
+            border: 2px solid #c9a959;  /* Dunnere border */
             border-radius: 50%;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            margin-bottom: 40px;
+            margin-bottom: 20px;  /* Verkleind van 40px naar 20px */
             position: relative;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+            box-shadow: 0 5px 10px rgba(0,0,0,0.2);  /* Minder schaduw */
         }
 
         .central-concept-input {
-            width: 140px;
-            padding: 8px;
+            width: 80px;  /* Verkleind van 140px naar 80px */
+            padding: 4px;  /* Verkleind van 8px naar 4px */
             background: white;
-            border: 2px solid #c9a959;
-            border-radius: 20px;
+            border: 1px solid #c9a959;  /* Dunnere border */
+            border-radius: 12px;  /* Kleinere radius */
             text-align: center;
             font-weight: bold;
             color: #0a1a2b;
-            margin-top: 5px;
+            margin-top: 3px;
+            font-size: 0.7em;  /* Kleinere font */
+            font-family: inherit;
         }
 
         .central-concept-input:focus {
@@ -545,38 +581,38 @@
 
         .central-label {
             color: #c9a959;
-            font-size: 0.8em;
+            font-size: 0.6em;  /* Kleinere font */
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 0.5px;
         }
 
         .arrow-down {
-            width: 2px;
-            height: 30px;
+            width: 1px;  /* Dunnere lijn */
+            height: 15px;  /* Verkleind van 30px naar 15px */
             background: #c9a959;
             position: relative;
-            margin: 10px 0;
+            margin: 5px 0;  /* Minder marge */
         }
 
         .arrow-down:after {
             content: '';
             position: absolute;
-            bottom: -5px;
-            left: -4px;
+            bottom: -4px;  /* Aangepast */
+            left: -4px;  /* Aangepast */
             width: 0;
             height: 0;
-            border-left: 5px solid transparent;
-            border-right: 5px solid transparent;
-            border-top: 8px solid #c9a959;
+            border-left: 4px solid transparent;  /* Kleinere pijlpunt */
+            border-right: 4px solid transparent;
+            border-top: 6px solid #c9a959;
         }
 
         .nodes-container {
             display: flex;
             justify-content: center;
-            gap: 40px;
+            gap: 20px;  /* Verkleind van 40px naar 20px */
             flex-wrap: wrap;
             position: relative;
-            margin-top: 20px;
+            margin-top: 10px;  /* Verkleind van 20px naar 10px */
         }
 
         .node-item {
@@ -587,62 +623,65 @@
         }
 
         .node-arrow {
-            width: 2px;
-            height: 25px;
+            width: 1px;  /* Dunnere lijn */
+            height: 12px;  /* Verkleind van 25px naar 12px */
             background: #c9a959;
-            margin-bottom: 10px;
+            margin-bottom: 5px;  /* Verkleind van 10px naar 5px */
             position: relative;
         }
 
         .node-arrow:after {
             content: '';
             position: absolute;
-            bottom: -5px;
-            left: -4px;
+            bottom: -4px;  /* Aangepast */
+            left: -4px;  /* Aangepast */
             width: 0;
             height: 0;
-            border-left: 5px solid transparent;
-            border-right: 5px solid transparent;
-            border-top: 8px solid #c9a959;
+            border-left: 4px solid transparent;
+            border-right: 4px solid transparent;
+            border-top: 6px solid #c9a959;
         }
 
         .node-rectangle {
-            width: 180px;
+            width: 120px;  /* Verkleind van 180px naar 120px */
             background: white;
-            border: 3px solid #c9a959;
-            border-radius: 10px;
-            padding: 15px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border: 2px solid #c9a959;  /* Dunnere border */
+            border-radius: 6px;  /* Kleinere radius */
+            padding: 10px;  /* Verkleind van 15px naar 10px */
+            box-shadow: 0 3px 8px rgba(0,0,0,0.1);  /* Minder schaduw */
             transition: all 0.3s;
         }
 
         .node-rectangle:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 20px rgba(201, 169, 89, 0.3);
+            transform: translateY(-2px);  /* Minder hover-effect */
+            box-shadow: 0 4px 10px rgba(201, 169, 89, 0.3);
         }
 
         .node-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 10px;
-            padding-bottom: 5px;
+            margin-bottom: 5px;  /* Verkleind van 10px naar 5px */
+            padding-bottom: 3px;  /* Verkleind van 5px naar 3px */
             border-bottom: 1px solid #c9a959;
         }
 
         .node-label {
             font-weight: bold;
             color: #0a1a2b;
-            font-size: 0.9em;
+            font-size: 0.7em;  /* Kleinere font */
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         .node-delete {
             background: none;
             border: none;
             color: #c9a959;
-            font-size: 1.2em;
+            font-size: 1em;  /* Iets kleiner */
             cursor: pointer;
-            padding: 0 5px;
+            padding: 0 3px;
+            font-weight: bold;
         }
 
         .node-delete:hover {
@@ -651,13 +690,14 @@
 
         .node-textarea {
             width: 100%;
-            padding: 8px;
+            padding: 4px;  /* Verkleind van 8px naar 4px */
             border: 1px solid #c9a959;
-            border-radius: 5px;
-            font-size: 0.9em;
+            border-radius: 4px;  /* Kleinere radius */
+            font-size: 0.7em;  /* Kleinere font */
             resize: vertical;
-            min-height: 60px;
+            min-height: 40px;  /* Verkleind van 60px naar 40px */
             background: #f8f9fa;
+            font-family: inherit;
         }
 
         .node-textarea:focus {
@@ -669,13 +709,15 @@
             background: #0a1a2b;
             color: #c9a959;
             border: 2px solid #c9a959;
-            padding: 10px 20px;
-            border-radius: 8px;
+            padding: 5px 12px;  /* Forse verkleining */
+            border-radius: 4px;
             cursor: pointer;
-            font-size: 1em;
-            margin-top: 20px;
+            font-size: 0.8em;  /* Kleinere font */
+            margin-top: 10px;  /* Verkleind van 20px naar 10px */
             align-self: center;
             transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         .add-node-btn:hover {
@@ -685,9 +727,9 @@
 
         .mindmap-actions {
             display: flex;
-            gap: 15px;
+            gap: 8px;  /* Verkleind van 15px naar 8px */
             justify-content: flex-end;
-            margin-top: 20px;
+            margin-top: 10px;  /* Verkleind van 20px naar 10px */
         }
 
         .design-box {
@@ -706,6 +748,8 @@
             font-weight: bold;
             border-bottom: 1px solid #c9a959;
             padding-bottom: 5px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         .design-description {
@@ -726,6 +770,9 @@
             margin-bottom: 20px;
             border-bottom: 2px solid #c9a959;
             padding-bottom: 10px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
         .results-filters {
@@ -743,6 +790,9 @@
             min-width: 200px;
             background: white;
             color: #0a1a2b;
+            font-family: inherit;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         .filter-select:focus {
@@ -775,6 +825,8 @@
         .result-name {
             font-weight: bold;
             color: #0a1a2b;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         .result-level {
@@ -792,6 +844,8 @@
             border-radius: 15px;
             font-size: 0.9em;
             margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
         
         .question-badge {
@@ -859,6 +913,8 @@
             margin-left: 5px;
             border-radius: 5px;
             font-size: 0.9em;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
         
         .expand-btn:hover {
@@ -925,16 +981,16 @@
             }
 
             .nodes-container {
-                gap: 20px;
+                gap: 15px;
             }
 
             .node-rectangle {
-                width: 150px;
+                width: 100px;
             }
 
             .central-concept {
-                width: 150px;
-                height: 150px;
+                width: 80px;
+                height: 80px;
             }
         }
     </style>
@@ -1320,7 +1376,7 @@
             if (level === 0) {
                 theoryHTML += `
                     <div class="police-warning">
-                        <h4>⚠️ BELANGRIJKE VEILIGHEIDSWAARSCHUWING</h4>
+                        <h4>BELANGRIJKE VEILIGHEIDSWAARSCHUWING</h4>
                         <ul>
                             <li><strong>Gebruik nooit gegevens van jouw politie-account</strong> bij AI-tools</li>
                             <li><strong>Gebruik nooit wachtwoorden van jouw politieaccount</strong> voor AI-diensten</li>
@@ -1352,7 +1408,7 @@
             if (levelData.materials && levelData.materials.length > 0) {
                 theoryHTML += `
                     <div class="materials-section">
-                        <div class="materials-title">📚 Materialen voor niveau ${level}</div>
+                        <div class="materials-title">Materialen voor niveau ${level}</div>
                         <ul class="materials-list">
                 `;
                 
@@ -1362,7 +1418,7 @@
                     } else if (item.type === 'pdf') {
                         // Voor PDF met paginanummer
                         const pdfUrl = item.page ? `${item.url}#page=${item.page}` : item.url;
-                        theoryHTML += `<li><a href="${pdfUrl}" target="_blank" class="pdf-link">📄 ${item.title} (pag. ${item.page})</a></li>`;
+                        theoryHTML += `<li><a href="${pdfUrl}" target="_blank" class="pdf-link">PDF ${item.title} (pag. ${item.page})</a></li>`;
                     }
                 });
                 
@@ -1413,28 +1469,28 @@
                     <div class="design-description">${levelData.designTask.description}</div>
             `;
             
-            // Voor niveau 0: speciale mindmap editor
+            // Voor niveau 0: speciale mindmap editor (50% kleiner)
             if (level === 0) {
                 designHTML += `
                     <div class="mindmap-editor" id="mindmapEditor">
                         <div class="mindmap-tools">
                             <button class="mindmap-tool-btn" onclick="addMindmapNode()">
-                                + Voeg categorie toe
+                                + Categorie
                             </button>
                             <button class="mindmap-tool-btn" onclick="saveMindmap()">
-                                Mindmap opslaan
+                                Opslaan
                             </button>
                             <button class="mindmap-tool-btn" onclick="loadMindmap()">
-                                Mindmap laden
+                                Laden
                             </button>
                         </div>
                         
                         <div class="mindmap-canvas" id="mindmapCanvas">
                             <!-- Centraal concept (rondje) -->
                             <div class="central-concept">
-                                <span class="central-label">CENTRAAL CONCEPT</span>
+                                <span class="central-label">CENTRAAL</span>
                                 <input type="text" class="central-concept-input" id="centralConcept" 
-                                    placeholder="AI in onderwijs" value="AI in onderwijs">
+                                    placeholder="AI" value="AI in onderwijs">
                             </div>
                             
                             <div class="arrow-down"></div>
@@ -1445,7 +1501,7 @@
                             </div>
                             
                             <button class="add-node-btn" onclick="addMindmapNode()">
-                                + Nieuwe categorie toevoegen
+                                + Categorie
                             </button>
                         </div>
                         
@@ -1486,11 +1542,11 @@
                     <div class="node-arrow"></div>
                     <div class="node-rectangle">
                         <div class="node-header">
-                            <span class="node-label">Categorie ${nodeCount}</span>
+                            <span class="node-label">Cat. ${nodeCount}</span>
                             <button class="node-delete" onclick="deleteMindmapNode('${nodeId}')">×</button>
                         </div>
                         <textarea class="node-textarea" 
-                            placeholder="Beschrijf deze categorie..."></textarea>
+                            placeholder="Beschrijf..."></textarea>
                     </div>
                 </div>
             `;
@@ -1589,11 +1645,11 @@
                                     <div class="node-arrow"></div>
                                     <div class="node-rectangle">
                                         <div class="node-header">
-                                            <span class="node-label">${node.label || `Categorie ${nodeCount}`}</span>
+                                            <span class="node-label">${node.label || `Cat. ${nodeCount}`}</span>
                                             <button class="node-delete" onclick="deleteMindmapNode('${nodeId}')">×</button>
                                         </div>
                                         <textarea class="node-textarea" 
-                                            placeholder="Beschrijf deze categorie...">${node.content || ''}</textarea>
+                                            placeholder="Beschrijf...">${node.content || ''}</textarea>
                                     </div>
                                 </div>
                             `;
