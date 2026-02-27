@@ -1,799 +1,365 @@
-<!DOCTYPE html>
-<html lang="nl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI in Onderwijs - Interactief Werkboek</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+// Vervang de loadResults en loadLocalResults functies door deze uitgebreide versies:
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            padding: 20px;
-        }
-
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            background: white;
-            border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-            overflow: hidden;
-        }
-
-        header {
-            background: linear-gradient(135deg, #6B73FF 0%, #000DFF 100%);
-            color: white;
-            padding: 40px;
-            text-align: center;
-        }
-
-        header h1 {
-            font-size: 2.5em;
-            margin-bottom: 10px;
-        }
-
-        header p {
-            font-size: 1.2em;
-            opacity: 0.9;
-        }
-
-        .user-section {
-            background: #f8f9fa;
-            padding: 20px 40px;
-            border-bottom: 2px solid #e9ecef;
-            display: flex;
-            gap: 20px;
-            align-items: center;
-            flex-wrap: wrap;
-        }
-
-        .user-input {
-            flex: 1;
-            min-width: 250px;
-        }
-
-        .user-input label {
-            display: block;
-            margin-bottom: 5px;
-            color: #495057;
-            font-weight: 600;
-        }
-
-        .user-input input {
-            width: 100%;
-            padding: 12px;
-            border: 2px solid #ced4da;
-            border-radius: 8px;
-            font-size: 1em;
-            transition: border-color 0.3s;
-        }
-
-        .user-input input:focus {
-            outline: none;
-            border-color: #6B73FF;
-        }
-
-        .user-button {
-            background: #28a745;
-            color: white;
-            border: none;
-            padding: 12px 30px;
-            border-radius: 8px;
-            font-size: 1em;
-            cursor: pointer;
-            transition: background 0.3s;
-            font-weight: 600;
-        }
-
-        .user-button:hover {
-            background: #218838;
-        }
-
-        .level-selector {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 5px;
-            padding: 20px 40px;
-            background: #f1f3f5;
-            border-bottom: 2px solid #dee2e6;
-        }
-
-        .level-btn {
-            flex: 1;
-            min-width: 60px;
-            padding: 15px 10px;
-            border: none;
-            background: white;
-            color: #495057;
-            font-weight: bold;
-            font-size: 1.1em;
-            cursor: pointer;
-            transition: all 0.3s;
-            border-radius: 8px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
-
-        .level-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-        }
-
-        .level-btn.active {
-            background: linear-gradient(135deg, #6B73FF 0%, #000DFF 100%);
-            color: white;
-        }
-
-        .level-btn[data-level="0"] { border-left: 5px solid #dc3545; }
-        .level-btn[data-level="1"] { border-left: 5px solid #fd7e14; }
-        .level-btn[data-level="2"] { border-left: 5px solid #ffc107; }
-        .level-btn[data-level="3"] { border-left: 5px solid #28a745; }
-        .level-btn[data-level="4"] { border-left: 5px solid #17a2b8; }
-        .level-btn[data-level="5"] { border-left: 5px solid #6610f2; }
-
-        .content {
-            display: flex;
-            flex-wrap: wrap;
-        }
-
-        .questions-section {
-            flex: 2;
-            min-width: 400px;
-            padding: 40px;
-            background: white;
-        }
-
-        .design-section {
-            flex: 1;
-            min-width: 300px;
-            padding: 40px;
-            background: #f8f9fa;
-            border-left: 2px solid #e9ecef;
-        }
-
-        .level-title {
-            font-size: 2em;
-            margin-bottom: 30px;
-            color: #333;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .level-badge {
-            padding: 5px 15px;
-            border-radius: 25px;
-            font-size: 0.5em;
-            font-weight: normal;
-            background: #6c757d;
-            color: white;
-        }
-
-        .question-item {
-            background: white;
-            border: 2px solid #e9ecef;
-            border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 20px;
-            transition: all 0.3s;
-        }
-
-        .question-item:hover {
-            border-color: #6B73FF;
-            box-shadow: 0 5px 20px rgba(107, 115, 255, 0.1);
-        }
-
-        .question-number {
-            font-size: 1.2em;
-            font-weight: bold;
-            color: #6B73FF;
-            margin-bottom: 10px;
-        }
-
-        .question-text {
-            font-size: 1.1em;
-            color: #333;
-            margin-bottom: 15px;
-            line-height: 1.6;
-        }
-
-        .answer-input {
-            width: 100%;
-            padding: 15px;
-            border: 2px solid #ced4da;
-            border-radius: 8px;
-            font-size: 1em;
-            margin: 10px 0;
-            resize: vertical;
-        }
-
-        .save-btn {
-            background: #6B73FF;
-            color: white;
-            border: none;
-            padding: 10px 25px;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: background 0.3s;
-            font-weight: 600;
-        }
-
-        .save-btn:hover {
-            background: #000DFF;
-        }
-
-        .design-box {
-            background: white;
-            border-radius: 15px;
-            padding: 25px;
-            margin-top: 20px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
-        }
-
-        .design-title {
-            font-size: 1.3em;
-            color: #333;
-            margin-bottom: 15px;
-            font-weight: bold;
-        }
-
-        .design-description {
-            color: #666;
-            margin-bottom: 20px;
-            line-height: 1.6;
-        }
-
-        .results-section {
-            padding: 40px;
-            background: #f1f3f5;
-            border-top: 2px solid #dee2e6;
-        }
-
-        .results-title {
-            font-size: 1.8em;
-            color: #333;
-            margin-bottom: 20px;
-        }
-
-        .results-filters {
-            display: flex;
-            gap: 15px;
-            margin-bottom: 25px;
-            flex-wrap: wrap;
-        }
-
-        .filter-select {
-            padding: 10px;
-            border: 2px solid #ced4da;
-            border-radius: 8px;
-            font-size: 1em;
-            min-width: 200px;
-        }
-
-        .results-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 20px;
-        }
-
-        .result-card {
-            background: white;
-            border-radius: 12px;
-            padding: 20px;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
-        }
-
-        .result-header {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 15px;
-            padding-bottom: 10px;
-            border-bottom: 2px solid #e9ecef;
-        }
-
-        .result-name {
-            font-weight: bold;
-            color: #333;
-        }
-
-        .result-level {
-            background: #6B73FF;
-            color: white;
-            padding: 3px 10px;
-            border-radius: 15px;
-            font-size: 0.9em;
-        }
-
-        .result-question {
-            color: #666;
-            margin-bottom: 10px;
-        }
-
-        .result-answer {
-            background: #f8f9fa;
-            padding: 10px;
-            border-radius: 8px;
-            color: #333;
-        }
-
-        .status-message {
-            padding: 10px;
-            border-radius: 8px;
-            margin-top: 10px;
-            display: none;
-        }
-
-        .status-success {
-            background: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
-        }
-
-        .status-error {
-            background: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
-        }
-
-        @media (max-width: 768px) {
-            .content {
-                flex-direction: column;
-            }
-            
-            .design-section {
-                border-left: none;
-                border-top: 2px solid #e9ecef;
-            }
-        }
-    </style>
+function loadResults() {
+    const resultsGrid = document.getElementById('resultsGrid');
+    const filterLevel = document.getElementById('filterLevel').value;
+    const filterUser = document.getElementById('filterUser').value;
     
-    <!-- Firebase SDKs -->
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
-</head>
-<body>
-    <div class="container">
-        <header>
-            <h1>🤖 AI in het Onderwijs</h1>
-            <p>Interactief werkboek - Van beginner tot expert (Niveau 0 → 5)</p>
-        </header>
-
-        <div class="user-section">
-            <div class="user-input">
-                <label for="userName">📝 Jouw naam</label>
-                <input type="text" id="userName" placeholder="Voer je naam in..." value="Docent">
-            </div>
-            <button class="user-button" onclick="updateUser()">✅ Bevestig naam</button>
-        </div>
-
-        <div class="level-selector" id="levelSelector">
-            <!-- Levels worden hier dynamisch gegenereerd -->
-        </div>
-
-        <div class="content">
-            <div class="questions-section" id="questionsSection">
-                <!-- Vragen worden hier dynamisch geladen -->
-            </div>
-
-            <div class="design-section" id="designSection">
-                <!-- Ontwerpopdracht wordt hier dynamisch geladen -->
-            </div>
-        </div>
-
-        <div class="results-section" id="resultsSection">
-            <h2 class="results-title">📊 Resultatenoverzicht</h2>
-            <div class="results-filters">
-                <select class="filter-select" id="filterLevel" onchange="loadResults()">
-                    <option value="all">Alle niveaus</option>
-                    <option value="0">Niveau 0</option>
-                    <option value="1">Niveau 1</option>
-                    <option value="2">Niveau 2</option>
-                    <option value="3">Niveau 3</option>
-                    <option value="4">Niveau 4</option>
-                    <option value="5">Niveau 5</option>
-                </select>
-                <select class="filter-select" id="filterUser" onchange="loadResults()">
-                    <option value="all">Alle deelnemers</option>
-                </select>
-            </div>
-            <div id="resultsGrid" class="results-grid">
-                <!-- Resultaten worden hier dynamisch geladen -->
-            </div>
-        </div>
-    </div>
-
-    <script>
-        // Firebase configuratie - VUL HIER JOUW FIREBASE GEGEVENS IN!
-        const firebaseConfig = {
-            apiKey: "JOUW_API_KEY",
-            authDomain: "JOUW_AUTH_DOMAIN",
-            databaseURL: "JOUW_DATABASE_URL",
-            projectId: "JOUW_PROJECT_ID",
-            storageBucket: "JOUW_STORAGE_BUCKET",
-            messagingSenderId: "JOUW_MESSAGING_SENDER_ID",
-            appId: "JOUW_APP_ID"
-        };
-
-        // Initialize Firebase
-        let database;
-        try {
-            firebase.initializeApp(firebaseConfig);
-            database = firebase.database();
-            console.log("Firebase geïnitialiseerd!");
-        } catch (error) {
-            console.error("Firebase init error:", error);
-        }
-
-        // Huidige gebruiker en niveau
-        let currentUser = localStorage.getItem('currentUser') || 'Docent';
-        let currentLevel = 0;
-        document.getElementById('userName').value = currentUser;
-
-        // Niveau definities met vragen en ontwerpopdrachten
-        const levels = [
-            {
-                level: 0,
-                name: "Beginner",
-                description: "Geen ervaring met AI",
-                questions: [
-                    "Wat is AI en hoe zou je het in één zin uitleggen aan een collega?",
-                    "Welke AI-tools heb je wel eens voorbij zien komen in het onderwijs?",
-                    "Wat zijn je grootste zorgen over het gebruik van AI in de klas?",
-                    "Hoe denk je dat AI momenteel wordt gebruikt in het onderwijs?",
-                    "Welke voordelen zou AI kunnen bieden voor jouw lessen?"
-                ],
-                designTask: {
-                    title: "🎯 Ontwerp: AI-verkenning",
-                    description: "Maak een mindmap van alle mogelijke toepassingen van AI in jouw vakgebied. Gebruik minimaal 10 verschillende ideeën en categoriseer ze."
-                }
-            },
-            {
-                level: 1,
-                name: "Ontdekker",
-                description: "Eerste ervaringen met AI",
-                questions: [
-                    "Met welke AI-tool heb je recent geëxperimenteerd en wat was je ervaring?",
-                    "Hoe zou je ChatGPT kunnen inzetten bij je lesvoorbereiding?",
-                    "Welke ethische bezwaren zie je bij AI-gebruik door leerlingen?",
-                    "Wat is het verschil tussen narrow AI en general AI?",
-                    "Hoe betrouwbaar vind je de output van huidige AI-tools?"
-                ],
-                designTask: {
-                    title: "🤖 Ontwerp: Eerste AI-assistent",
-                    description: "Ontwerp een eenvoudige prompt-sjabloon voor een AI-assistent die jou helpt bij het maken van lesmateriaal. Maak 5 verschillende prompts voor verschillende doeleinden."
-                }
-            },
-            {
-                level: 2,
-                name: "Gebruiker",
-                description: "Regelmatig AI-gebruik",
-                questions: [
-                    "Hoe integreer je AI nu concreet in je lespraktijk?",
-                    "Welke richtlijnen heb je opgesteld voor AI-gebruik door leerlingen?",
-                    "Hoe ga je om met AI-gegenereerde antwoorden bij toetsen?",
-                    "Welke AI-tool vind je het meest waardevol en waarom?",
-                    "Hoe zorg je voor kritisch denken bij AI-uitkomsten?"
-                ],
-                designTask: {
-                    title: "📚 Ontwerp: Lesintegratie",
-                    description: "Ontwikkel een complete les van 50 minuten waarin leerlingen op een verantwoorde manier AI gebruiken. Beschrijf leerdoelen, werkvormen en evaluatie."
-                }
-            },
-            {
-                level: 3,
-                name: "Integrator",
-                description: "AI structureel inzetten",
-                questions: [
-                    "Hoe differentieer je met AI in je lessen voor verschillende niveaus?",
-                    "Welke professionele taken heb je geautomatiseerd met AI?",
-                    "Hoe begeleid je collega's bij het starten met AI?",
-                    "Wat zijn de beste prompts die je hebt ontwikkeld?",
-                    "Hoe meet je de effectiviteit van AI in je onderwijs?"
-                ],
-                designTask: {
-                    title: "⚙️ Ontwerp: AI-werkwijze",
-                    description: "Creëer een gestandaardiseerde werkwijze voor AI-gebruik in jouw vakgroep. Ontwikkel een stappenplan, richtlijnen en evaluatieformulier."
-                }
-            },
-            {
-                level: 4,
-                name: "Expert",
-                description: "AI als tweede natuur",
-                questions: [
-                    "Hoe pas je AI aan voor specifieke leerbehoeften van studenten?",
-                    "Welke innovatieve toepassingen van AI heb je ontwikkeld?",
-                    "Hoe combineer je meerdere AI-tools voor optimaal resultaat?",
-                    "Wat zijn de limitaties van huidige AI in jouw onderwijspraktijk?",
-                    "Hoe draag je bij aan AI-beleid op school?"
-                ],
-                designTask: {
-                    title: "🚀 Ontwerp: Innovatieproject",
-                    description: "Ontwerp een innovatief AI-project voor jouw school dat minimaal 3 verschillende AI-tools combineert en een concreet onderwijsprobleem oplost."
-                }
-            },
-            {
-                level: 5,
-                name: "Master",
-                description: "AI-expert en vernieuwer",
-                questions: [
-                    "Hoe ontwikkel je zelf AI-oplossingen voor het onderwijs?",
-                    "Welke visie heb je op AI in het onderwijs over 5 jaar?",
-                    "Hoe begeleid je andere scholen bij AI-implementatie?",
-                    "Wat zijn de nieuwste AI-ontwikkelingen die relevant zijn?",
-                    "Hoe waarborg je kwaliteit en ethiek bij AI-gebruik?"
-                ],
-                designTask: {
-                    title: "🌟 Ontwerp: AI-visie & Strategie",
-                    description: "Ontwikkel een complete AI-visie en implementatiestrategie voor jouw school. Werk dit uit in een plan voor de komende 3 jaar met concrete mijlpalen."
-                }
-            }
-        ];
-
-        // Initialize
-        document.getElementById('userName').value = currentUser;
-        renderLevelSelector();
-        renderLevel(currentLevel);
-        loadResults();
-        updateUserFilter();
-
-        function renderLevelSelector() {
-            const selector = document.getElementById('levelSelector');
-            selector.innerHTML = '';
-            levels.forEach(level => {
-                const btn = document.createElement('button');
-                btn.className = `level-btn ${currentLevel === level.level ? 'active' : ''}`;
-                btn.setAttribute('data-level', level.level);
-                btn.innerHTML = `Niveau ${level.level}<br><small>${level.name}</small>`;
-                btn.onclick = () => selectLevel(level.level);
-                selector.appendChild(btn);
+    if (!database) {
+        resultsGrid.innerHTML = '<p>⚠️ Database niet verbonden. Toon lokale resultaten...</p>';
+        loadLocalResults();
+        return;
+    }
+    
+    // Haal zowel antwoorden als ontwerpen op
+    Promise.all([
+        database.ref('answers').once('value'),
+        database.ref('designs').once('value')
+    ]).then(([answersSnapshot, designsSnapshot]) => {
+        const answers = answersSnapshot.val() || {};
+        const designs = designsSnapshot.val() || {};
+        
+        // Combineer en formatteer alle resultaten
+        let allResults = [];
+        
+        // Voeg antwoorden toe
+        Object.values(answers).forEach(answer => {
+            allResults.push({
+                type: 'answer',
+                userId: answer.userId,
+                level: answer.level,
+                questionIndex: answer.questionIndex,
+                questionText: levels[answer.level]?.questions[answer.questionIndex] || 'Vraag niet gevonden',
+                content: answer.answer,
+                timestamp: answer.timestamp,
+                levelName: levels[answer.level]?.name || 'Onbekend'
             });
-        }
-
-        function selectLevel(level) {
-            currentLevel = level;
-            renderLevelSelector();
-            renderLevel(level);
-        }
-
-        function renderLevel(level) {
-            const levelData = levels[level];
-            
-            // Render vragen
-            const questionsSection = document.getElementById('questionsSection');
-            questionsSection.innerHTML = `
-                <div class="level-title">
-                    Niveau ${level}: ${levelData.name}
-                    <span class="level-badge">${levelData.description}</span>
-                </div>
-            `;
-
-            levelData.questions.forEach((question, index) => {
-                const questionId = `q${level}_${index}`;
-                const savedAnswer = localStorage.getItem(`${currentUser}_${questionId}`) || '';
-                
-                questionsSection.innerHTML += `
-                    <div class="question-item" id="question-${level}-${index}">
-                        <div class="question-number">Vraag ${index + 1}/5</div>
-                        <div class="question-text">${question}</div>
-                        <textarea class="answer-input" id="input-${level}-${index}" placeholder="Jouw antwoord..." rows="3">${savedAnswer}</textarea>
-                        <button class="save-btn" onclick="saveAnswer(${level}, ${index})">💾 Antwoord opslaan</button>
-                        <div id="status-${level}-${index}" class="status-message"></div>
-                    </div>
-                `;
+        });
+        
+        // Voeg ontwerpen toe
+        Object.values(designs).forEach(design => {
+            allResults.push({
+                type: 'design',
+                userId: design.userId,
+                level: design.level,
+                designTitle: levels[design.level]?.designTask.title || 'Ontwerpopdracht',
+                content: design.design,
+                timestamp: design.timestamp,
+                levelName: levels[design.level]?.name || 'Onbekend'
             });
-
-            // Render ontwerpopdracht
-            const designSection = document.getElementById('designSection');
-            const savedDesign = localStorage.getItem(`${currentUser}_design_${level}`) || '';
-            
-            designSection.innerHTML = `
-                <h2>${levelData.designTask.title}</h2>
-                <div class="design-box">
-                    <div class="design-description">${levelData.designTask.description}</div>
-                    <textarea class="answer-input" id="design-${level}" placeholder="Werk hier je ontwerp uit..." rows="10">${savedDesign}</textarea>
-                    <button class="save-btn" onclick="saveDesign(${level})">💾 Ontwerp opslaan</button>
-                    <div id="status-design-${level}" class="status-message"></div>
-                </div>
-            `;
+        });
+        
+        // Filters toepassen
+        if (filterLevel !== 'all') {
+            allResults = allResults.filter(r => r.level == filterLevel);
         }
-
-        function saveAnswer(level, questionIndex) {
-            const input = document.getElementById(`input-${level}-${questionIndex}`);
-            const answer = input.value;
-            const questionId = `q${level}_${questionIndex}`;
-            
-            // Opslaan in localStorage als backup
-            localStorage.setItem(`${currentUser}_${questionId}`, answer);
-            
-            // Opslaan in Firebase
-            if (database) {
-                const answerData = {
-                userId: currentUser,
-                level: level,
-                questionIndex: questionIndex,
-                answer: answer,
-                timestamp: new Date().toISOString()
-            };
-            
-            database.ref('answers/' + currentUser + '_' + questionId).set(answerData)
-                .then(() => {
-                    showStatus(`status-${level}-${questionIndex}`, '✅ Antwoord opgeslagen in database!', 'success');
-                    loadResults(); // Update resultatenoverzicht
-                })
-                .catch(error => {
-                    console.error('Firebase error:', error);
-                    showStatus(`status-${level}-${questionIndex}`, '❌ Fout bij opslaan in database, maar lokaal opgeslagen', 'error');
-                });
-            } else {
-                showStatus(`status-${level}-${questionIndex}`, '✅ Antwoord lokaal opgeslagen (geen database)', 'success');
-            }
+        if (filterUser !== 'all') {
+            allResults = allResults.filter(r => r.userId === filterUser);
         }
-
-        function saveDesign(level) {
-            const input = document.getElementById(`design-${level}`);
-            const design = input.value;
-            
-            localStorage.setItem(`${currentUser}_design_${level}`, design);
-            
-            if (database) {
-                const designData = {
-                    userId: currentUser,
-                    level: level,
-                    design: design,
-                    timestamp: new Date().toISOString()
-                };
-                
-                database.ref('designs/' + currentUser + '_' + level).set(designData)
-                    .then(() => {
-                        showStatus(`status-design-${level}`, '✅ Ontwerp opgeslagen in database!', 'success');
-                        loadResults();
-                    })
-                    .catch(error => {
-                        console.error('Firebase error:', error);
-                        showStatus(`status-design-${level}`, '❌ Fout bij opslaan in database, maar lokaal opgeslagen', 'error');
-                    });
-            } else {
-                showStatus(`status-design-${level}`, '✅ Ontwerp lokaal opgeslagen (geen database)', 'success');
-            }
+        
+        // Sorteer op timestamp (nieuwste eerst)
+        allResults.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+        
+        if (allResults.length === 0) {
+            resultsGrid.innerHTML = '<p>📭 Nog geen resultaten voor deze filters.</p>';
+            return;
         }
-
-        function showStatus(elementId, message, type) {
-            const statusEl = document.getElementById(elementId);
-            statusEl.textContent = message;
-            statusEl.className = `status-message status-${type}`;
-            statusEl.style.display = 'block';
-            
-            setTimeout(() => {
-                statusEl.style.display = 'none';
-            }, 3000);
-        }
-
-        function updateUser() {
-            const newUser = document.getElementById('userName').value.trim();
-            if (newUser) {
-                currentUser = newUser;
-                localStorage.setItem('currentUser', currentUser);
-                renderLevel(currentLevel);
-                updateUserFilter();
-                loadResults();
-                
-                // Toon bevestiging
-                alert(`✅ Gebruiker gewijzigd naar: ${currentUser}`);
-            }
-        }
-
-        function updateUserFilter() {
-            const filterUser = document.getElementById('filterUser');
-            if (!database) return;
-            
-            database.ref('answers').once('value', (snapshot) => {
-                const answers = snapshot.val() || {};
-                const users = new Set();
-                
-                Object.values(answers).forEach(answer => {
-                    if (answer.userId) users.add(answer.userId);
-                });
-                
-                filterUser.innerHTML = '<option value="all">Alle deelnemers</option>';
-                users.forEach(user => {
-                    filterUser.innerHTML += `<option value="${user}">${user}</option>`;
-                });
-            });
-        }
-
-        function loadResults() {
-            const resultsGrid = document.getElementById('resultsGrid');
-            const filterLevel = document.getElementById('filterLevel').value;
-            const filterUser = document.getElementById('filterUser').value;
-            
-            if (!database) {
-                resultsGrid.innerHTML = '<p>⚠️ Database niet verbonden. Toon lokale resultaten...</p>';
-                loadLocalResults();
-                return;
-            }
-            
-            database.ref('answers').once('value', (snapshot) => {
-                const answers = snapshot.val() || {};
-                let results = Object.values(answers);
-                
-                // Filters toepassen
-                if (filterLevel !== 'all') {
-                    results = results.filter(r => r.level == filterLevel);
-                }
-                if (filterUser !== 'all') {
-                    results = results.filter(r => r.userId === filterUser);
-                }
-                
-                // Sorteer op timestamp (nieuwste eerst)
-                results.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
-                
-                if (results.length === 0) {
-                    resultsGrid.innerHTML = '<p>📭 Nog geen resultaten voor deze filters.</p>';
-                    return;
-                }
-                
-                resultsGrid.innerHTML = results.map(result => `
-                    <div class="result-card">
+        
+        // Toon resultaten met onderscheid tussen vragen en ontwerpen
+        resultsGrid.innerHTML = allResults.map(result => {
+            if (result.type === 'answer') {
+                // Weergave voor vraag-antwoord
+                return `
+                    <div class="result-card answer-card">
                         <div class="result-header">
                             <span class="result-name">${result.userId}</span>
-                            <span class="result-level">Niveau ${result.level}</span>
+                            <span class="result-level">Niveau ${result.level}: ${result.levelName}</span>
                         </div>
+                        <div class="result-type-badge question-badge">❓ Vraag ${result.questionIndex + 1}</div>
                         <div class="result-question">
-                            <strong>Vraag ${result.questionIndex + 1}:</strong><br>
-                            ${levels[result.level].questions[result.questionIndex]}
+                            <strong>Vraag:</strong><br>
+                            ${result.questionText}
                         </div>
                         <div class="result-answer">
-                            ${result.answer || 'Geen antwoord'}
+                            <strong>Antwoord:</strong><br>
+                            ${result.content || 'Geen antwoord'}
                         </div>
                         <small style="color: #999; display: block; margin-top: 10px;">
                             🕐 ${new Date(result.timestamp).toLocaleString()}
                         </small>
                     </div>
-                `).join('');
-            }).catch(error => {
-                console.error('Error loading results:', error);
-                resultsGrid.innerHTML = '<p>❌ Fout bij laden van resultaten</p>';
+                `;
+            } else {
+                // Weergave voor ontwerpproduct
+                return `
+                    <div class="result-card design-card">
+                        <div class="result-header">
+                            <span class="result-name">${result.userId}</span>
+                            <span class="result-level">Niveau ${result.level}: ${result.levelName}</span>
+                        </div>
+                        <div class="result-type-badge design-badge">🎨 Ontwerpproduct</div>
+                        <div class="result-question">
+                            <strong>${result.designTitle}</strong>
+                        </div>
+                        <div class="result-answer design-content">
+                            <strong>Uitwerking:</strong><br>
+                            ${formatDesignContent(result.content)}
+                        </div>
+                        <small style="color: #999; display: block; margin-top: 10px;">
+                            🕐 ${new Date(result.timestamp).toLocaleString()}
+                        </small>
+                    </div>
+                `;
+            }
+        }).join('');
+        
+        // Voeg een samenvatting toe bovenaan
+        addResultsSummary(allResults);
+        
+    }).catch(error => {
+        console.error('Error loading results:', error);
+        resultsGrid.innerHTML = '<p>❌ Fout bij laden van resultaten</p>';
+    });
+}
+
+function formatDesignContent(content) {
+    if (!content) return 'Geen uitwerking';
+    
+    // Als de content lang is, toon eerste 200 karakters met "lees meer" optie
+    if (content.length > 200) {
+        const shortContent = content.substring(0, 200) + '...';
+        return `
+            <div class="design-content-preview">
+                ${shortContent}
+                <button class="expand-btn" onclick="expandDesign(this)" data-fullcontent="${encodeURIComponent(content)}">Lees meer</button>
+            </div>
+            <div class="design-content-full" style="display:none;">${content}</div>
+        `;
+    }
+    return content;
+}
+
+function addResultsSummary(results) {
+    // Groepeer resultaten per gebruiker en niveau
+    const summary = {};
+    results.forEach(result => {
+        if (!summary[result.userId]) {
+            summary[result.userId] = {
+                answers: {},
+                designs: {}
+            };
+        }
+        
+        if (result.type === 'answer') {
+            if (!summary[result.userId].answers[result.level]) {
+                summary[result.userId].answers[result.level] = [];
+            }
+            summary[result.userId].answers[result.level].push(result.questionIndex);
+        } else {
+            summary[result.userId].designs[result.level] = true;
+        }
+    });
+    
+    // Maak een samenvatting bovenaan de resultaten
+    const summaryHTML = `
+        <div class="results-summary">
+            <h3>📊 Samenvatting per deelnemer</h3>
+            <div class="summary-grid">
+                ${Object.entries(summary).map(([user, data]) => `
+                    <div class="summary-item">
+                        <strong>${user}</strong><br>
+                        <span class="summary-answers">
+                            ✅ Vragen beantwoord: 
+                            ${Object.entries(data.answers).map(([level, questions]) => 
+                                `niv.${level} (${questions.length}/5)`
+                            ).join(', ') || 'Geen'}
+                        </span><br>
+                        <span class="summary-designs">
+                            🎨 Ontwerpen: 
+                            ${Object.keys(data.designs).map(level => 
+                                `niv.${level}`
+                            ).join(', ') || 'Geen'}
+                        </span>
+                    </div>
+                `).join('')}
+            </div>
+        </div>
+    `;
+    
+    // Voeg de samenvatting toe boven de resultaten
+    const resultsSection = document.querySelector('.results-section');
+    const existingSummary = resultsSection.querySelector('.results-summary');
+    if (existingSummary) {
+        existingSummary.remove();
+    }
+    resultsSection.insertAdjacentHTML('afterbegin', summaryHTML);
+}
+
+function expandDesign(btn) {
+    const fullContent = decodeURIComponent(btn.dataset.fullcontent);
+    const preview = btn.closest('.design-content-preview');
+    preview.style.display = 'none';
+    
+    const full = btn.closest('.result-card').querySelector('.design-content-full');
+    full.style.display = 'block';
+    full.innerHTML = fullContent;
+}
+
+function loadLocalResults() {
+    const resultsGrid = document.getElementById('resultsGrid');
+    const localResults = [];
+    
+    // Haal alle lokale antwoorden en ontwerpen op
+    for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        
+        if (key.includes('_q')) {
+            // Dit is een antwoord
+            const parts = key.split('_');
+            const user = parts[0];
+            const levelQuestion = parts[1];
+            const level = levelQuestion.substring(1, 2);
+            const questionIndex = levelQuestion.substring(3);
+            
+            localResults.push({
+                type: 'answer',
+                user: user,
+                level: level,
+                questionIndex: questionIndex,
+                content: localStorage.getItem(key),
+                key: key
+            });
+        } else if (key.includes('_design_')) {
+            // Dit is een ontwerp
+            const parts = key.split('_');
+            const user = parts[0];
+            const level = parts[2];
+            
+            localResults.push({
+                type: 'design',
+                user: user,
+                level: level,
+                content: localStorage.getItem(key),
+                key: key
             });
         }
-
-        function loadLocalResults() {
-            const resultsGrid = document.getElementById('resultsGrid');
-            const localResults = [];
-            
-            // Haal alle lokale antwoorden op
-            for (let i = 0; i < localStorage.length; i++) {
-                const key = localStorage.key(i);
-                if (key.includes('_q') || key.includes('_design')) {
-                    localResults.push({
-                        key: key,
-                        value: localStorage.getItem(key)
-                    });
-                }
-            }
-            
-            if (localResults.length === 0) {
-                resultsGrid.innerHTML = '<p>📭 Nog geen lokale resultaten.</p>';
-                return;
-            }
-            
-            resultsGrid.innerHTML = localResults.map(result => `
-                <div class="result-card">
+    }
+    
+    if (localResults.length === 0) {
+        resultsGrid.innerHTML = '<p>📭 Nog geen lokale resultaten.</p>';
+        return;
+    }
+    
+    resultsGrid.innerHTML = localResults.map(result => {
+        if (result.type === 'answer') {
+            return `
+                <div class="result-card answer-card">
                     <div class="result-header">
-                        <span class="result-name">Lokaal</span>
-                        <span class="result-level">${result.key}</span>
+                        <span class="result-name">${result.user}</span>
+                        <span class="result-level">Niveau ${result.level}</span>
                     </div>
+                    <div class="result-type-badge question-badge">❓ Vraag ${parseInt(result.questionIndex) + 1}</div>
                     <div class="result-answer">
-                        ${result.value.substring(0, 100)}${result.value.length > 100 ? '...' : ''}
+                        <strong>Lokaal antwoord:</strong><br>
+                        ${result.content.substring(0, 150)}${result.content.length > 150 ? '...' : ''}
                     </div>
                 </div>
-            `).join('');
+            `;
+        } else {
+            return `
+                <div class="result-card design-card">
+                    <div class="result-header">
+                        <span class="result-name">${result.user}</span>
+                        <span class="result-level">Niveau ${result.level}</span>
+                    </div>
+                    <div class="result-type-badge design-badge">🎨 Lokaal ontwerp</div>
+                    <div class="result-answer">
+                        <strong>Ontwerp (lokaal):</strong><br>
+                        ${result.content.substring(0, 150)}${result.content.length > 150 ? '...' : ''}
+                    </div>
+                </div>
+            `;
         }
-    </script>
-</body>
-</html>
+    }).join('');
+}
+
+// Voeg deze CSS toe aan de style sectie voor de nieuwe elementen
+const styleToAdd = `
+    .result-type-badge {
+        display: inline-block;
+        padding: 3px 10px;
+        border-radius: 15px;
+        font-size: 0.9em;
+        margin-bottom: 10px;
+    }
+    
+    .question-badge {
+        background: #e3f2fd;
+        color: #1976d2;
+    }
+    
+    .design-badge {
+        background: #f3e5f5;
+        color: #7b1fa2;
+    }
+    
+    .answer-card {
+        border-left: 4px solid #1976d2;
+    }
+    
+    .design-card {
+        border-left: 4px solid #7b1fa2;
+    }
+    
+    .design-content-preview {
+        position: relative;
+    }
+    
+    .expand-btn {
+        background: none;
+        border: none;
+        color: #6B73FF;
+        cursor: pointer;
+        text-decoration: underline;
+        margin-left: 5px;
+    }
+    
+    .expand-btn:hover {
+        color: #000DFF;
+    }
+    
+    .results-summary {
+        background: white;
+        border-radius: 12px;
+        padding: 20px;
+        margin-bottom: 25px;
+        box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+    }
+    
+    .summary-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 15px;
+        margin-top: 15px;
+    }
+    
+    .summary-item {
+        background: #f8f9fa;
+        padding: 15px;
+        border-radius: 8px;
+        border-left: 4px solid #6B73FF;
+    }
+    
+    .summary-answers {
+        color: #1976d2;
+        font-size: 0.9em;
+    }
+    
+    .summary-designs {
+        color: #7b1fa2;
+        font-size: 0.9em;
+    }
+`;
+
+// Voeg de CSS toe aan het bestaande style element
+document.head.insertAdjacentHTML('beforeend', `<style>${styleToAdd}</style>`);
