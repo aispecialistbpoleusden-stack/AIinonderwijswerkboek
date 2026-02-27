@@ -149,13 +149,6 @@
             border: 1px solid #c9a959;
         }
 
-        .level-btn[data-level="0"] { border-left: 5px solid #0a1a2b; }
-        .level-btn[data-level="1"] { border-left: 5px solid #0a1a2b; }
-        .level-btn[data-level="2"] { border-left: 5px solid #0a1a2b; }
-        .level-btn[data-level="3"] { border-left: 5px solid #0a1a2b; }
-        .level-btn[data-level="4"] { border-left: 5px solid #0a1a2b; }
-        .level-btn[data-level="5"] { border-left: 5px solid #0a1a2b; }
-
         .content {
             display: flex;
             flex-wrap: wrap;
@@ -295,7 +288,6 @@
             color: #0a1a2b;
         }
 
-        /* Politie-waarschuwing voor niveau 0 */
         .police-warning {
             background: #ffebee;
             border-left: 5px solid #d32f2f;
@@ -366,7 +358,6 @@
             font-weight: bold;
         }
 
-        /* Materialenlijst styling */
         .materials-section {
             margin-top: 30px;
             background: #ffffff;
@@ -498,30 +489,30 @@
         .mindmap-editor {
             background: #ffffff;
             border-radius: 15px;
-            padding: 15px;  /* Verkleind van 25px naar 15px */
-            margin: 15px 0;  /* Verkleind van 20px naar 15px */
-            box-shadow: 0 3px 10px rgba(0,0,0,0.1);  /* Minder schaduw */
-            border: 1px solid #c9a959;  /* Dunnere border */
+            padding: 15px;
+            margin: 15px 0;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            border: 1px solid #c9a959;
         }
 
         .mindmap-tools {
             display: flex;
-            gap: 8px;  /* Verkleind van 15px naar 8px */
-            margin-bottom: 12px;  /* Verkleind van 20px naar 12px */
+            gap: 8px;
+            margin-bottom: 12px;
             flex-wrap: wrap;
-            padding-bottom: 10px;  /* Verkleind van 15px naar 10px */
+            padding-bottom: 10px;
             border-bottom: 1px solid #c9a959;
         }
 
         .mindmap-tool-btn {
             background: #f0f0f0;
-            border: 1px solid #c9a959;  /* Dunnere border */
+            border: 1px solid #c9a959;
             color: #0a1a2b;
-            padding: 5px 12px;  /* Forse verkleining: was 10px 20px */
-            border-radius: 4px;  /* Kleinere radius */
+            padding: 5px 12px;
+            border-radius: 4px;
             cursor: pointer;
             font-weight: 600;
-            font-size: 0.8em;  /* Kleinere font */
+            font-size: 0.8em;
             transition: all 0.3s;
             text-transform: uppercase;
             letter-spacing: 0.5px;
@@ -533,44 +524,44 @@
         }
 
         .mindmap-canvas {
-            min-height: 250px;  /* Verkleind van 400px naar 250px */
+            min-height: 250px;
             background: #f8f9fa;
-            border: 1px dashed #c9a959;  /* Dunnere border */
-            border-radius: 6px;  /* Kleinere radius */
-            padding: 15px;  /* Verkleind van 30px naar 15px */
+            border: 1px dashed #c9a959;
+            border-radius: 6px;
+            padding: 15px;
             position: relative;
-            margin-bottom: 12px;  /* Verkleind van 20px naar 12px */
+            margin-bottom: 12px;
             display: flex;
             flex-direction: column;
             align-items: center;
         }
 
         .central-concept {
-            width: 100px;  /* Verkleind van 180px naar 100px */
-            height: 100px;  /* Verkleind van 180px naar 100px */
+            width: 100px;
+            height: 100px;
             background: #0a1a2b;
-            border: 2px solid #c9a959;  /* Dunnere border */
+            border: 2px solid #c9a959;
             border-radius: 50%;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            margin-bottom: 20px;  /* Verkleind van 40px naar 20px */
+            margin-bottom: 20px;
             position: relative;
-            box-shadow: 0 5px 10px rgba(0,0,0,0.2);  /* Minder schaduw */
+            box-shadow: 0 5px 10px rgba(0,0,0,0.2);
         }
 
         .central-concept-input {
-            width: 80px;  /* Verkleind van 140px naar 80px */
-            padding: 4px;  /* Verkleind van 8px naar 4px */
+            width: 80px;
+            padding: 4px;
             background: white;
-            border: 1px solid #c9a959;  /* Dunnere border */
-            border-radius: 12px;  /* Kleinere radius */
+            border: 1px solid #c9a959;
+            border-radius: 12px;
             text-align: center;
             font-weight: bold;
             color: #0a1a2b;
             margin-top: 3px;
-            font-size: 0.7em;  /* Kleinere font */
+            font-size: 0.7em;
             font-family: inherit;
         }
 
@@ -581,27 +572,27 @@
 
         .central-label {
             color: #c9a959;
-            font-size: 0.6em;  /* Kleinere font */
+            font-size: 0.6em;
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
 
         .arrow-down {
-            width: 1px;  /* Dunnere lijn */
-            height: 15px;  /* Verkleind van 30px naar 15px */
+            width: 1px;
+            height: 15px;
             background: #c9a959;
             position: relative;
-            margin: 5px 0;  /* Minder marge */
+            margin: 5px 0;
         }
 
         .arrow-down:after {
             content: '';
             position: absolute;
-            bottom: -4px;  /* Aangepast */
-            left: -4px;  /* Aangepast */
+            bottom: -4px;
+            left: -4px;
             width: 0;
             height: 0;
-            border-left: 4px solid transparent;  /* Kleinere pijlpunt */
+            border-left: 4px solid transparent;
             border-right: 4px solid transparent;
             border-top: 6px solid #c9a959;
         }
@@ -609,10 +600,10 @@
         .nodes-container {
             display: flex;
             justify-content: center;
-            gap: 20px;  /* Verkleind van 40px naar 20px */
+            gap: 20px;
             flex-wrap: wrap;
             position: relative;
-            margin-top: 10px;  /* Verkleind van 20px naar 10px */
+            margin-top: 10px;
         }
 
         .node-item {
@@ -623,18 +614,18 @@
         }
 
         .node-arrow {
-            width: 1px;  /* Dunnere lijn */
-            height: 12px;  /* Verkleind van 25px naar 12px */
+            width: 1px;
+            height: 12px;
             background: #c9a959;
-            margin-bottom: 5px;  /* Verkleind van 10px naar 5px */
+            margin-bottom: 5px;
             position: relative;
         }
 
         .node-arrow:after {
             content: '';
             position: absolute;
-            bottom: -4px;  /* Aangepast */
-            left: -4px;  /* Aangepast */
+            bottom: -4px;
+            left: -4px;
             width: 0;
             height: 0;
             border-left: 4px solid transparent;
@@ -643,17 +634,17 @@
         }
 
         .node-rectangle {
-            width: 120px;  /* Verkleind van 180px naar 120px */
+            width: 120px;
             background: white;
-            border: 2px solid #c9a959;  /* Dunnere border */
-            border-radius: 6px;  /* Kleinere radius */
-            padding: 10px;  /* Verkleind van 15px naar 10px */
-            box-shadow: 0 3px 8px rgba(0,0,0,0.1);  /* Minder schaduw */
+            border: 2px solid #c9a959;
+            border-radius: 6px;
+            padding: 10px;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.1);
             transition: all 0.3s;
         }
 
         .node-rectangle:hover {
-            transform: translateY(-2px);  /* Minder hover-effect */
+            transform: translateY(-2px);
             box-shadow: 0 4px 10px rgba(201, 169, 89, 0.3);
         }
 
@@ -661,15 +652,15 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 5px;  /* Verkleind van 10px naar 5px */
-            padding-bottom: 3px;  /* Verkleind van 5px naar 3px */
+            margin-bottom: 5px;
+            padding-bottom: 3px;
             border-bottom: 1px solid #c9a959;
         }
 
         .node-label {
             font-weight: bold;
             color: #0a1a2b;
-            font-size: 0.7em;  /* Kleinere font */
+            font-size: 0.7em;
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
@@ -678,7 +669,7 @@
             background: none;
             border: none;
             color: #c9a959;
-            font-size: 1em;  /* Iets kleiner */
+            font-size: 1em;
             cursor: pointer;
             padding: 0 3px;
             font-weight: bold;
@@ -690,12 +681,12 @@
 
         .node-textarea {
             width: 100%;
-            padding: 4px;  /* Verkleind van 8px naar 4px */
+            padding: 4px;
             border: 1px solid #c9a959;
-            border-radius: 4px;  /* Kleinere radius */
-            font-size: 0.7em;  /* Kleinere font */
+            border-radius: 4px;
+            font-size: 0.7em;
             resize: vertical;
-            min-height: 40px;  /* Verkleind van 60px naar 40px */
+            min-height: 40px;
             background: #f8f9fa;
             font-family: inherit;
         }
@@ -709,11 +700,11 @@
             background: #0a1a2b;
             color: #c9a959;
             border: 2px solid #c9a959;
-            padding: 5px 12px;  /* Forse verkleining */
+            padding: 5px 12px;
             border-radius: 4px;
             cursor: pointer;
-            font-size: 0.8em;  /* Kleinere font */
-            margin-top: 10px;  /* Verkleind van 20px naar 10px */
+            font-size: 0.8em;
+            margin-top: 10px;
             align-self: center;
             transition: all 0.3s;
             text-transform: uppercase;
@@ -727,9 +718,9 @@
 
         .mindmap-actions {
             display: flex;
-            gap: 8px;  /* Verkleind van 15px naar 8px */
+            gap: 8px;
             justify-content: flex-end;
-            margin-top: 10px;  /* Verkleind van 20px naar 10px */
+            margin-top: 10px;
         }
 
         .design-box {
@@ -800,6 +791,43 @@
             border-color: #0a1a2b;
         }
 
+        .results-actions {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+            justify-content: flex-end;
+        }
+
+        .results-action-btn {
+            background: #0a1a2b;
+            color: #c9a959;
+            border: 2px solid #c9a959;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.9em;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .results-action-btn:hover {
+            background: #c9a959;
+            color: #0a1a2b;
+        }
+
+        .results-action-btn.danger {
+            background: #dc3545;
+            color: white;
+            border-color: #dc3545;
+        }
+
+        .results-action-btn.danger:hover {
+            background: #bd2130;
+        }
+
         .results-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -812,11 +840,13 @@
             padding: 20px;
             box-shadow: 0 3px 10px rgba(0,0,0,0.1);
             border-left: 4px solid #c9a959;
+            position: relative;
         }
 
         .result-header {
             display: flex;
             justify-content: space-between;
+            align-items: center;
             margin-bottom: 15px;
             padding-bottom: 10px;
             border-bottom: 2px solid #c9a959;
@@ -836,6 +866,29 @@
             border-radius: 15px;
             font-size: 0.9em;
             border: 1px solid #c9a959;
+            margin: 0 5px;
+        }
+
+        .delete-result-btn {
+            background: none;
+            border: 2px solid #dc3545;
+            color: #dc3545;
+            font-size: 1.2em;
+            font-weight: bold;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-left: 5px;
+        }
+
+        .delete-result-btn:hover {
+            background: #dc3545;
+            color: white;
         }
 
         .result-type-badge {
@@ -879,6 +932,8 @@
             border-radius: 8px;
             color: #333333;
             border: 1px solid #c9a959;
+            max-height: 150px;
+            overflow-y: auto;
         }
 
         .status-message {
@@ -998,6 +1053,10 @@
     <!-- Firebase SDKs -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+    
+    <!-- jsPDF voor PDF export -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
 </head>
 <body>
     <div class="container">
@@ -1047,6 +1106,10 @@
                 <select class="filter-select" id="filterUser" onchange="loadResults()">
                     <option value="all">Alle deelnemers</option>
                 </select>
+            </div>
+            <div class="results-actions">
+                <button class="results-action-btn" onclick="exportToPDF()">Exporteer naar PDF</button>
+                <button class="results-action-btn danger" onclick="resetAllResults()">Reset alle resultaten</button>
             </div>
             <div id="resultsGrid" class="results-grid">
                 <!-- Resultaten worden hier dynamisch geladen -->
@@ -1107,7 +1170,6 @@
                         "AI kan administratieve taken verlichten",
                         "Bewustwording is de eerste stap naar integratie"
                     ],
-                    // Specifieke politie-waarschuwing voor niveau 0
                     policeWarning: true
                 },
                 materials: [
@@ -1416,7 +1478,6 @@
                     if (item.type === 'link') {
                         theoryHTML += `<li><a href="${item.url}" target="_blank">${item.title}</a></li>`;
                     } else if (item.type === 'pdf') {
-                        // Voor PDF met paginanummer
                         const pdfUrl = item.page ? `${item.url}#page=${item.page}` : item.url;
                         theoryHTML += `<li><a href="${pdfUrl}" target="_blank" class="pdf-link">PDF ${item.title} (pag. ${item.page})</a></li>`;
                     }
@@ -1469,7 +1530,7 @@
                     <div class="design-description">${levelData.designTask.description}</div>
             `;
             
-            // Voor niveau 0: speciale mindmap editor (50% kleiner)
+            // Voor niveau 0: speciale mindmap editor
             if (level === 0) {
                 designHTML += `
                     <div class="mindmap-editor" id="mindmapEditor">
@@ -1611,7 +1672,6 @@
                 showStatus('status-design-0', 'Mindmap lokaal opgeslagen', 'success');
             }
             
-            // Toon bevestiging
             alert('Mindmap opgeslagen!');
         }
 
@@ -1821,7 +1881,8 @@
                         questionText: levels[answer.level]?.questions[answer.questionIndex] || 'Vraag niet gevonden',
                         content: answer.answer,
                         timestamp: answer.timestamp,
-                        levelName: levels[answer.level]?.name || 'Onbekend'
+                        levelName: levels[answer.level]?.name || 'Onbekend',
+                        key: answer.userId + '_q' + answer.level + '_' + answer.questionIndex
                     });
                 });
                 
@@ -1833,7 +1894,8 @@
                         designTitle: levels[design.level]?.designTask.title || 'Ontwerpopdracht',
                         content: design.design,
                         timestamp: design.timestamp,
-                        levelName: levels[design.level]?.name || 'Onbekend'
+                        levelName: levels[design.level]?.name || 'Onbekend',
+                        key: design.userId + '_design_' + design.level
                     });
                 });
                 
@@ -1854,10 +1916,11 @@
                 resultsGrid.innerHTML = allResults.map(result => {
                     if (result.type === 'answer') {
                         return `
-                            <div class="result-card answer-card">
+                            <div class="result-card answer-card" id="result-${result.key}">
                                 <div class="result-header">
                                     <span class="result-name">${result.userId}</span>
                                     <span class="result-level">Niveau ${result.level}: ${result.levelName}</span>
+                                    <button class="delete-result-btn" onclick="deleteResult('${result.key}', 'answer', ${result.level}, ${result.questionIndex})" title="Verwijder dit antwoord">×</button>
                                 </div>
                                 <div class="result-type-badge question-badge">Vraag ${result.questionIndex + 1}</div>
                                 <div class="result-question">
@@ -1886,10 +1949,11 @@
                         }
                         
                         return `
-                            <div class="result-card design-card">
+                            <div class="result-card design-card" id="result-${result.key}">
                                 <div class="result-header">
                                     <span class="result-name">${result.userId}</span>
                                     <span class="result-level">Niveau ${result.level}: ${result.levelName}</span>
+                                    <button class="delete-result-btn" onclick="deleteResult('${result.key}', 'design', ${result.level})" title="Verwijder dit ontwerp">×</button>
                                 </div>
                                 <div class="result-type-badge design-badge">Ontwerpproduct</div>
                                 <div class="result-question">
@@ -1991,6 +2055,159 @@
             resultsSection.insertAdjacentHTML('afterbegin', summaryHTML);
         }
 
+        // Functie om een specifiek resultaat te verwijderen
+        function deleteResult(key, type, level, questionIndex = null) {
+            if (!confirm('Weet je zeker dat je dit resultaat wilt verwijderen?')) {
+                return;
+            }
+            
+            // Verwijder uit Firebase
+            if (database) {
+                if (type === 'answer') {
+                    database.ref('answers/' + key).remove()
+                        .then(() => {
+                            // Verwijder ook uit localStorage
+                            localStorage.removeItem(key);
+                            showStatusMessage('Resultaat verwijderd!', 'success');
+                            loadResults(); // Herlaad de resultaten
+                        })
+                        .catch(error => {
+                            console.error('Fout bij verwijderen:', error);
+                            showStatusMessage('Fout bij verwijderen', 'error');
+                        });
+                } else {
+                    database.ref('designs/' + key).remove()
+                        .then(() => {
+                            localStorage.removeItem(key);
+                            showStatusMessage('Ontwerp verwijderd!', 'success');
+                            loadResults();
+                        })
+                        .catch(error => {
+                            console.error('Fout bij verwijderen:', error);
+                            showStatusMessage('Fout bij verwijderen', 'error');
+                        });
+                }
+            }
+        }
+
+        // Functie om alle resultaten te resetten
+        function resetAllResults() {
+            if (!confirm('WEES VOORZICHTIG: Dit verwijdert ALLE resultaten uit de database. Exporteer eerst naar PDF als je ze wilt bewaren. Weet je het zeker?')) {
+                return;
+            }
+            
+            if (!database) return;
+            
+            // Verwijder alle answers en designs
+            Promise.all([
+                database.ref('answers').remove(),
+                database.ref('designs').remove()
+            ]).then(() => {
+                // Verwijder ook alle gerelateerde items uit localStorage
+                const keysToRemove = [];
+                for (let i = 0; i < localStorage.length; i++) {
+                    const key = localStorage.key(i);
+                    if (key.includes('_q') || key.includes('_design') || key.includes('_mindmap')) {
+                        keysToRemove.push(key);
+                    }
+                }
+                keysToRemove.forEach(key => localStorage.removeItem(key));
+                
+                showStatusMessage('Alle resultaten zijn gewist!', 'success');
+                loadResults(); // Herlaad de lege resultaten
+            }).catch(error => {
+                console.error('Fout bij resetten:', error);
+                showStatusMessage('Fout bij resetten', 'error');
+            });
+        }
+
+        // Hulpfunctie voor statusmeldingen
+        function showStatusMessage(message, type) {
+            const statusDiv = document.createElement('div');
+            statusDiv.className = `status-message status-${type}`;
+            statusDiv.style.display = 'block';
+            statusDiv.textContent = message;
+            statusDiv.style.position = 'fixed';
+            statusDiv.style.top = '20px';
+            statusDiv.style.right = '20px';
+            statusDiv.style.zIndex = '1000';
+            document.body.appendChild(statusDiv);
+            
+            setTimeout(() => {
+                statusDiv.remove();
+            }, 3000);
+        }
+
+        // PDF Export functie
+        function exportToPDF() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            
+            doc.setFontSize(18);
+            doc.text('AI in Onderwijs - Resultatenoverzicht', 14, 22);
+            doc.setFontSize(11);
+            doc.text(`Exportdatum: ${new Date().toLocaleString()}`, 14, 32);
+            
+            let yPos = 45;
+            
+            // Haal alle resultaten op uit de huidige weergave
+            const resultCards = document.querySelectorAll('.result-card');
+            
+            if (resultCards.length === 0) {
+                doc.text('Geen resultaten om te exporteren.', 14, yPos);
+            } else {
+                resultCards.forEach((card, index) => {
+                    const name = card.querySelector('.result-name')?.textContent || 'Onbekend';
+                    const level = card.querySelector('.result-level')?.textContent || 'Onbekend';
+                    const type = card.querySelector('.result-type-badge')?.textContent || 'Onbekend';
+                    const question = card.querySelector('.result-question')?.textContent || '';
+                    const answer = card.querySelector('.result-answer')?.textContent || '';
+                    
+                    doc.setFontSize(12);
+                    doc.setFont(undefined, 'bold');
+                    doc.text(`${index + 1}. ${name} - ${level}`, 14, yPos);
+                    yPos += 6;
+                    
+                    doc.setFont(undefined, 'normal');
+                    doc.setFontSize(10);
+                    
+                    // Split lange tekst voor PDF
+                    const questionLines = doc.splitTextToSize(`Vraag: ${question}`, 180);
+                    questionLines.forEach(line => {
+                        if (yPos > 270) {
+                            doc.addPage();
+                            yPos = 20;
+                        }
+                        doc.text(line, 14, yPos);
+                        yPos += 5;
+                    });
+                    
+                    const answerLines = doc.splitTextToSize(`Antwoord: ${answer}`, 180);
+                    answerLines.forEach(line => {
+                        if (yPos > 270) {
+                            doc.addPage();
+                            yPos = 20;
+                        }
+                        doc.text(line, 14, yPos);
+                        yPos += 5;
+                    });
+                    
+                    yPos += 5;
+                    
+                    // Nieuwe pagina indien nodig
+                    if (yPos > 270 && index < resultCards.length - 1) {
+                        doc.addPage();
+                        yPos = 20;
+                    }
+                });
+            }
+            
+            // Sla PDF op
+            doc.save(`AI-resultaten-${new Date().toISOString().slice(0,10)}.pdf`);
+            
+            showStatusMessage('PDF gedownload!', 'success');
+        }
+
         function loadLocalResults() {
             const resultsGrid = document.getElementById('resultsGrid');
             const localResults = [];
@@ -2040,6 +2257,7 @@
                             <div class="result-header">
                                 <span class="result-name">${result.user}</span>
                                 <span class="result-level">Niveau ${result.level}</span>
+                                <button class="delete-result-btn" onclick="deleteLocalResult('${result.key}')" title="Verwijder dit antwoord">×</button>
                             </div>
                             <div class="result-type-badge question-badge">Vraag ${parseInt(result.questionIndex) + 1}</div>
                             <div class="result-answer">
@@ -2054,6 +2272,7 @@
                             <div class="result-header">
                                 <span class="result-name">${result.user}</span>
                                 <span class="result-level">Niveau ${result.level}</span>
+                                <button class="delete-result-btn" onclick="deleteLocalResult('${result.key}')" title="Verwijder dit ontwerp">×</button>
                             </div>
                             <div class="result-type-badge design-badge">Lokaal ontwerp</div>
                             <div class="result-answer">
@@ -2064,6 +2283,12 @@
                     `;
                 }
             }).join('');
+        }
+
+        function deleteLocalResult(key) {
+            if (!confirm('Weet je zeker dat je dit lokale resultaat wilt verwijderen?')) return;
+            localStorage.removeItem(key);
+            loadLocalResults();
         }
     </script>
 </body>
