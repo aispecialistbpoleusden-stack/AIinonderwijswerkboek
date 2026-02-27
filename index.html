@@ -1,13 +1,2014 @@
-<!-- Vervang deze sectie in de mindmap-editor (rond regel 650) -->
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI in Onderwijs - Interactief Werkboek</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-<div class="mindmap-tools">
-    <button class="mindmap-tool-btn" onclick="addMindmapNode()">
-        + Voeg categorie toe
-    </button>
-    <button class="mindmap-tool-btn" onclick="saveMindmap()">
-        Mindmap opslaan
-    </button>
-    <button class="mindmap-tool-btn" onclick="loadMindmap()">
-        Mindmap laden
-    </button>
-</div>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #0a1a2b;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            background: #f5f5f5;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+            overflow: hidden;
+            border: 1px solid #c9a959;
+        }
+
+        header {
+            background: linear-gradient(135deg, #0a1a2b 0%, #1a2c3e 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+            border-bottom: 3px solid #c9a959;
+        }
+
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            color: #c9a959;
+        }
+
+        header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+            color: #ffffff;
+        }
+
+        .user-section {
+            background: #ffffff;
+            padding: 20px 40px;
+            border-bottom: 2px solid #c9a959;
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .user-input {
+            flex: 1;
+            min-width: 250px;
+        }
+
+        .user-input label {
+            display: block;
+            margin-bottom: 5px;
+            color: #0a1a2b;
+            font-weight: 600;
+        }
+
+        .user-input input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #c9a959;
+            border-radius: 8px;
+            font-size: 1em;
+            transition: border-color 0.3s;
+        }
+
+        .user-input input:focus {
+            outline: none;
+            border-color: #0a1a2b;
+        }
+
+        .user-button {
+            background: #0a1a2b;
+            color: #c9a959;
+            border: 2px solid #c9a959;
+            padding: 12px 30px;
+            border-radius: 8px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+        }
+
+        .user-button:hover {
+            background: #c9a959;
+            color: #0a1a2b;
+        }
+
+        .level-selector {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            padding: 20px 40px;
+            background: #e5e5e5;
+            border-bottom: 2px solid #c9a959;
+        }
+
+        .level-btn {
+            flex: 1;
+            min-width: 60px;
+            padding: 15px 10px;
+            border: none;
+            background: white;
+            color: #0a1a2b;
+            font-weight: bold;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: all 0.3s;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            border: 1px solid #c9a959;
+        }
+
+        .level-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(201, 169, 89, 0.3);
+            background: #c9a959;
+            color: #0a1a2b;
+        }
+
+        .level-btn.active {
+            background: #0a1a2b;
+            color: #c9a959;
+            border: 1px solid #c9a959;
+        }
+
+        .level-btn[data-level="0"] { border-left: 5px solid #0a1a2b; }
+        .level-btn[data-level="1"] { border-left: 5px solid #0a1a2b; }
+        .level-btn[data-level="2"] { border-left: 5px solid #0a1a2b; }
+        .level-btn[data-level="3"] { border-left: 5px solid #0a1a2b; }
+        .level-btn[data-level="4"] { border-left: 5px solid #0a1a2b; }
+        .level-btn[data-level="5"] { border-left: 5px solid #0a1a2b; }
+
+        .content {
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .theory-section {
+            flex: 1.2;
+            min-width: 400px;
+            padding: 40px;
+            background: #ffffff;
+            border-right: 2px solid #c9a959;
+        }
+
+        .questions-section {
+            flex: 1.8;
+            min-width: 450px;
+            padding: 40px;
+            background: #f5f5f5;
+        }
+
+        .design-section {
+            flex: 1.2;
+            min-width: 400px;
+            padding: 40px;
+            background: #ffffff;
+            border-left: 2px solid #c9a959;
+        }
+
+        .level-title {
+            font-size: 2em;
+            margin-bottom: 30px;
+            color: #0a1a2b;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .level-badge {
+            padding: 5px 15px;
+            border-radius: 25px;
+            font-size: 0.5em;
+            font-weight: normal;
+            background: #0a1a2b;
+            color: #c9a959;
+            border: 1px solid #c9a959;
+        }
+
+        .theory-dynamic {
+            background: #ffffff;
+            border-radius: 15px;
+            padding: 0;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            border-left: 5px solid #c9a959;
+            overflow: hidden;
+            width: 100%;
+        }
+
+        .theory-header {
+            background: #0a1a2b;
+            color: #c9a959;
+            padding: 15px 25px;
+            font-size: 1.2em;
+            font-weight: bold;
+            border-bottom: 2px solid #c9a959;
+        }
+
+        .theory-content {
+            padding: 25px;
+        }
+
+        .dynamic-text {
+            max-height: 300px;
+            overflow-y: auto;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border: 1px solid #c9a959;
+            line-height: 1.6;
+            color: #333333;
+            transition: max-height 0.3s ease;
+            width: 100%;
+            font-size: 1.05em;
+        }
+
+        .dynamic-text.expanded {
+            max-height: 600px;
+        }
+
+        .dynamic-text p {
+            margin-bottom: 15px;
+        }
+
+        .dynamic-text::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        .dynamic-text::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+
+        .dynamic-text::-webkit-scrollbar-thumb {
+            background: #c9a959;
+            border-radius: 10px;
+        }
+
+        .theory-controls {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+            margin-bottom: 20px;
+            justify-content: flex-end;
+        }
+
+        .theory-btn {
+            background: #0a1a2b;
+            color: #c9a959;
+            border: 1px solid #c9a959;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: all 0.3s;
+        }
+
+        .theory-btn:hover {
+            background: #c9a959;
+            color: #0a1a2b;
+        }
+
+        /* Politie-waarschuwing voor niveau 0 */
+        .police-warning {
+            background: #ffebee;
+            border-left: 5px solid #d32f2f;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            color: #b71c1c;
+            font-weight: 500;
+        }
+
+        .police-warning h4 {
+            color: #d32f2f;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+
+        .police-warning ul {
+            margin-left: 20px;
+        }
+
+        .police-warning li {
+            margin-bottom: 8px;
+        }
+
+        .key-points {
+            background: linear-gradient(135deg, #f8f4e8 0%, #f0e8d8 100%);
+            border-radius: 10px;
+            padding: 20px;
+            border-left: 4px solid #c9a959;
+        }
+
+        .key-points-title {
+            font-weight: bold;
+            color: #0a1a2b;
+            margin-bottom: 15px;
+            font-size: 1.1em;
+            border-bottom: 1px solid #c9a959;
+            padding-bottom: 5px;
+        }
+
+        .key-points-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .key-points-list li {
+            padding: 10px 0 10px 25px;
+            position: relative;
+            border-bottom: 1px solid rgba(201, 169, 89, 0.2);
+            color: #333333;
+        }
+
+        .key-points-list li:last-child {
+            border-bottom: none;
+        }
+
+        .key-points-list li:before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            color: #c9a959;
+            font-size: 1.5em;
+            font-weight: bold;
+        }
+
+        /* Materialenlijst styling */
+        .materials-section {
+            margin-top: 30px;
+            background: #ffffff;
+            border-radius: 10px;
+            padding: 20px;
+            border: 2px solid #c9a959;
+        }
+
+        .materials-title {
+            font-weight: bold;
+            color: #0a1a2b;
+            margin-bottom: 15px;
+            font-size: 1.1em;
+            border-bottom: 1px solid #c9a959;
+            padding-bottom: 5px;
+        }
+
+        .materials-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .materials-list li {
+            margin-bottom: 12px;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .materials-list li:before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: #c9a959;
+            font-weight: bold;
+        }
+
+        .materials-list a {
+            color: #0a1a2b;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+            word-break: break-all;
+        }
+
+        .materials-list a:hover {
+            color: #c9a959;
+            text-decoration: underline;
+        }
+
+        .materials-list .pdf-link {
+            background: #f8f4e8;
+            padding: 5px 10px;
+            border-radius: 5px;
+            display: inline-block;
+            border-left: 3px solid #c9a959;
+        }
+
+        .question-item {
+            background: white;
+            border: 2px solid #c9a959;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            transition: all 0.3s;
+        }
+
+        .question-item:hover {
+            border-color: #0a1a2b;
+            box-shadow: 0 5px 20px rgba(10, 26, 43, 0.1);
+        }
+
+        .question-number {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #0a1a2b;
+            margin-bottom: 10px;
+            border-bottom: 1px solid #c9a959;
+            padding-bottom: 5px;
+        }
+
+        .question-text {
+            font-size: 1.1em;
+            color: #333333;
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+
+        .answer-input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #c9a959;
+            border-radius: 8px;
+            font-size: 1em;
+            margin: 10px 0;
+            resize: vertical;
+            background: #f8f9fa;
+        }
+
+        .answer-input:focus {
+            outline: none;
+            border-color: #0a1a2b;
+        }
+
+        .save-btn {
+            background: #0a1a2b;
+            color: #c9a959;
+            border: 2px solid #c9a959;
+            padding: 10px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+        }
+
+        .save-btn:hover {
+            background: #c9a959;
+            color: #0a1a2b;
+        }
+
+        .mindmap-editor {
+            background: #ffffff;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 20px 0;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            border: 2px solid #c9a959;
+        }
+
+        .mindmap-tools {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #c9a959;
+        }
+
+        .mindmap-tool-btn {
+            background: #f0f0f0;
+            border: 2px solid #c9a959;
+            color: #0a1a2b;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .mindmap-tool-btn:hover {
+            background: #c9a959;
+            color: #0a1a2b;
+        }
+
+        .mindmap-canvas {
+            min-height: 400px;
+            background: #f8f9fa;
+            border: 2px dashed #c9a959;
+            border-radius: 10px;
+            padding: 30px;
+            position: relative;
+            margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .central-concept {
+            width: 180px;
+            height: 180px;
+            background: #0a1a2b;
+            border: 3px solid #c9a959;
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 40px;
+            position: relative;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+
+        .central-concept-input {
+            width: 140px;
+            padding: 8px;
+            background: white;
+            border: 2px solid #c9a959;
+            border-radius: 20px;
+            text-align: center;
+            font-weight: bold;
+            color: #0a1a2b;
+            margin-top: 5px;
+        }
+
+        .central-concept-input:focus {
+            outline: none;
+            border-color: #0a1a2b;
+        }
+
+        .central-label {
+            color: #c9a959;
+            font-size: 0.8em;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .arrow-down {
+            width: 2px;
+            height: 30px;
+            background: #c9a959;
+            position: relative;
+            margin: 10px 0;
+        }
+
+        .arrow-down:after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: -4px;
+            width: 0;
+            height: 0;
+            border-left: 5px solid transparent;
+            border-right: 5px solid transparent;
+            border-top: 8px solid #c9a959;
+        }
+
+        .nodes-container {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            flex-wrap: wrap;
+            position: relative;
+            margin-top: 20px;
+        }
+
+        .node-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+        }
+
+        .node-arrow {
+            width: 2px;
+            height: 25px;
+            background: #c9a959;
+            margin-bottom: 10px;
+            position: relative;
+        }
+
+        .node-arrow:after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: -4px;
+            width: 0;
+            height: 0;
+            border-left: 5px solid transparent;
+            border-right: 5px solid transparent;
+            border-top: 8px solid #c9a959;
+        }
+
+        .node-rectangle {
+            width: 180px;
+            background: white;
+            border: 3px solid #c9a959;
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+        }
+
+        .node-rectangle:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(201, 169, 89, 0.3);
+        }
+
+        .node-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            padding-bottom: 5px;
+            border-bottom: 1px solid #c9a959;
+        }
+
+        .node-label {
+            font-weight: bold;
+            color: #0a1a2b;
+            font-size: 0.9em;
+        }
+
+        .node-delete {
+            background: none;
+            border: none;
+            color: #c9a959;
+            font-size: 1.2em;
+            cursor: pointer;
+            padding: 0 5px;
+        }
+
+        .node-delete:hover {
+            color: #dc3545;
+        }
+
+        .node-textarea {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #c9a959;
+            border-radius: 5px;
+            font-size: 0.9em;
+            resize: vertical;
+            min-height: 60px;
+            background: #f8f9fa;
+        }
+
+        .node-textarea:focus {
+            outline: none;
+            border-color: #0a1a2b;
+        }
+
+        .add-node-btn {
+            background: #0a1a2b;
+            color: #c9a959;
+            border: 2px solid #c9a959;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1em;
+            margin-top: 20px;
+            align-self: center;
+            transition: all 0.3s;
+        }
+
+        .add-node-btn:hover {
+            background: #c9a959;
+            color: #0a1a2b;
+        }
+
+        .mindmap-actions {
+            display: flex;
+            gap: 15px;
+            justify-content: flex-end;
+            margin-top: 20px;
+        }
+
+        .design-box {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin-top: 20px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+            border: 1px solid #c9a959;
+        }
+
+        .design-title {
+            font-size: 1.3em;
+            color: #0a1a2b;
+            margin-bottom: 15px;
+            font-weight: bold;
+            border-bottom: 1px solid #c9a959;
+            padding-bottom: 5px;
+        }
+
+        .design-description {
+            color: #333333;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .results-section {
+            padding: 40px;
+            background: #e5e5e5;
+            border-top: 3px solid #c9a959;
+        }
+
+        .results-title {
+            font-size: 1.8em;
+            color: #0a1a2b;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #c9a959;
+            padding-bottom: 10px;
+        }
+
+        .results-filters {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+
+        .filter-select {
+            padding: 10px;
+            border: 2px solid #c9a959;
+            border-radius: 8px;
+            font-size: 1em;
+            min-width: 200px;
+            background: white;
+            color: #0a1a2b;
+        }
+
+        .filter-select:focus {
+            outline: none;
+            border-color: #0a1a2b;
+        }
+
+        .results-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .result-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            border-left: 4px solid #c9a959;
+        }
+
+        .result-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #c9a959;
+        }
+
+        .result-name {
+            font-weight: bold;
+            color: #0a1a2b;
+        }
+
+        .result-level {
+            background: #0a1a2b;
+            color: #c9a959;
+            padding: 3px 10px;
+            border-radius: 15px;
+            font-size: 0.9em;
+            border: 1px solid #c9a959;
+        }
+
+        .result-type-badge {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 15px;
+            font-size: 0.9em;
+            margin-bottom: 10px;
+        }
+        
+        .question-badge {
+            background: #0a1a2b;
+            color: #c9a959;
+            border: 1px solid #c9a959;
+        }
+        
+        .design-badge {
+            background: #c9a959;
+            color: #0a1a2b;
+            border: 1px solid #0a1a2b;
+        }
+        
+        .answer-card {
+            border-left: 4px solid #0a1a2b;
+        }
+        
+        .design-card {
+            border-left: 4px solid #c9a959;
+        }
+        
+        .result-question {
+            color: #333333;
+            margin-bottom: 10px;
+        }
+
+        .result-answer {
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 8px;
+            color: #333333;
+            border: 1px solid #c9a959;
+        }
+
+        .status-message {
+            padding: 10px;
+            border-radius: 8px;
+            margin-top: 10px;
+            display: none;
+        }
+
+        .status-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .status-error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .design-content-preview {
+            position: relative;
+        }
+        
+        .expand-btn {
+            background: none;
+            border: 2px solid #c9a959;
+            color: #0a1a2b;
+            cursor: pointer;
+            padding: 5px 10px;
+            margin-left: 5px;
+            border-radius: 5px;
+            font-size: 0.9em;
+        }
+        
+        .expand-btn:hover {
+            background: #c9a959;
+            color: #0a1a2b;
+        }
+        
+        .results-summary {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 25px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            border: 2px solid #c9a959;
+        }
+        
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        .summary-item {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #c9a959;
+        }
+        
+        .summary-answers {
+            color: #0a1a2b;
+            font-size: 0.9em;
+        }
+        
+        .summary-designs {
+            color: #c9a959;
+            font-size: 0.9em;
+            font-weight: bold;
+        }
+
+        @media (max-width: 1200px) {
+            .theory-section, .design-section {
+                min-width: 350px;
+            }
+            .questions-section {
+                min-width: 400px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .content {
+                flex-direction: column;
+            }
+            
+            .theory-section {
+                border-right: none;
+                border-bottom: 2px solid #c9a959;
+            }
+            
+            .design-section {
+                border-left: none;
+                border-top: 2px solid #c9a959;
+            }
+
+            .nodes-container {
+                gap: 20px;
+            }
+
+            .node-rectangle {
+                width: 150px;
+            }
+
+            .central-concept {
+                width: 150px;
+                height: 150px;
+            }
+        }
+    </style>
+    
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>AI IN HET ONDERWIJS</h1>
+            <p>Interactief werkboek - Van beginner tot expert (Niveau 0 → 5)</p>
+        </header>
+
+        <div class="user-section">
+            <div class="user-input">
+                <label for="userName">Jouw naam</label>
+                <input type="text" id="userName" placeholder="Voer je naam in..." value="Docent">
+            </div>
+            <button class="user-button" onclick="updateUser()">Bevestig naam</button>
+        </div>
+
+        <div class="level-selector" id="levelSelector">
+            <!-- Levels worden hier dynamisch gegenereerd -->
+        </div>
+
+        <div class="content">
+            <div class="theory-section" id="theorySection">
+                <!-- Theorie wordt hier dynamisch geladen in dynamische tekstvakken -->
+            </div>
+
+            <div class="questions-section" id="questionsSection">
+                <!-- Vragen worden hier dynamisch geladen -->
+            </div>
+
+            <div class="design-section" id="designSection">
+                <!-- Ontwerpopdracht wordt hier dynamisch geladen -->
+            </div>
+        </div>
+
+        <div class="results-section" id="resultsSection">
+            <h2 class="results-title">Resultatenoverzicht</h2>
+            <div class="results-filters">
+                <select class="filter-select" id="filterLevel" onchange="loadResults()">
+                    <option value="all">Alle niveaus</option>
+                    <option value="0">Niveau 0</option>
+                    <option value="1">Niveau 1</option>
+                    <option value="2">Niveau 2</option>
+                    <option value="3">Niveau 3</option>
+                    <option value="4">Niveau 4</option>
+                    <option value="5">Niveau 5</option>
+                </select>
+                <select class="filter-select" id="filterUser" onchange="loadResults()">
+                    <option value="all">Alle deelnemers</option>
+                </select>
+            </div>
+            <div id="resultsGrid" class="results-grid">
+                <!-- Resultaten worden hier dynamisch geladen -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Firebase configuratie - JOUW Spark database
+        const firebaseConfig = {
+            apiKey: "AIzaSyC_qP9Yyr5BGLvHVuUC4Tham4M0AwPEEJE",
+            authDomain: "opdrachtenboek-generatieve-ai.firebaseapp.com",
+            databaseURL: "https://opdrachtenboek-generatieve-ai-default-rtdb.europe-west1.firebasedatabase.app",
+            projectId: "opdrachtenboek-generatieve-ai",
+            storageBucket: "opdrachtenboek-generatieve-ai.firebasestorage.app",
+            messagingSenderId: "183622966071",
+            appId: "1:183622966071:web:aa58e8acb48cf9cec318b2"
+        };
+
+        // Initialize Firebase
+        let database;
+        try {
+            firebase.initializeApp(firebaseConfig);
+            database = firebase.database();
+            console.log("Firebase database verbonden!");
+        } catch (error) {
+            console.error("Firebase init error:", error);
+        }
+
+        // Huidige gebruiker en niveau
+        let currentUser = localStorage.getItem('currentUser') || 'Docent';
+        let currentLevel = 0;
+        document.getElementById('userName').value = currentUser;
+
+        // PDF bestand (vervang dit met het juiste pad naar jouw PDF)
+        const pdfFile = "AI in het onderwijs (1-9)_ AI aanpassen aan jouw behoeften.pdf";
+
+        // Niveau definities met theorie, vragen, materialen en ontwerpopdrachten
+        const levels = [
+            {
+                level: 0,
+                name: "Beginner",
+                description: "Geen ervaring met AI",
+                theory: {
+                    text: `
+                        <p>AI, oftewel kunstmatige intelligentie, is een breed vakgebied binnen de computerwetenschappen dat zich richt op het creëren van systemen die taken kunnen uitvoeren waarvoor normaal gesproken menselijke intelligentie nodig is. Denk aan leren, redeneren, problemen oplossen, waarnemen en taalbegrip.</p>
+                        
+                        <p>In het onderwijs zien we AI steeds vaker terug in verschillende vormen. Van adaptieve leersystemen die zich aanpassen aan het niveau van de leerling, tot geautomatiseerde beoordeling van opdrachten. Ook tools als ChatGPT en andere generatieve AI worden steeds toegankelijker voor zowel docenten als leerlingen.</p>
+                        
+                        <p>Voor beginners is het belangrijk om eerst een basisbegrip te ontwikkelen van wat AI wel en niet is. AI is geen magie, maar een tool die getraind is op grote hoeveelheden data. Het kan patronen herkennen en voorspellingen doen, maar mist echt begrip en bewustzijn.</p>
+                        
+                        <p>Op dit niveau draait het om bewustwording en verkenning. Welke AI-tools bestaan er? Wat kunnen ze? En wat betekent dit mogelijk voor jouw onderwijspraktijk? Het is de basis waarop alle verdere ontwikkeling voortbouwt.</p>
+                    `,
+                    keyPoints: [
+                        "AI is een hulpmiddel, geen vervanging voor de docent",
+                        "Basisprincipes: AI leert van data en herkent patronen",
+                        "Bekende voorbeelden: ChatGPT, adaptieve leersystemen, vertaaltools",
+                        "AI kan administratieve taken verlichten",
+                        "Bewustwording is de eerste stap naar integratie"
+                    ],
+                    // Specifieke politie-waarschuwing voor niveau 0
+                    policeWarning: true
+                },
+                materials: [
+                    { type: "link", title: "ChatGPT - account aanmaken", url: "https://chat.openai.com" },
+                    { type: "link", title: "ElevenLabs - tekst-naar-spraak", url: "https://elevenlabs.io" },
+                    { type: "pdf", title: "Artikel 1: AI in het onderwijs (introductie)", url: pdfFile, page: 1 },
+                    { type: "pdf", title: "Artikel 2: De rol van de leraar", url: pdfFile, page: 8 },
+                    { type: "pdf", title: "Artikel 3: Lesmateriaal ontwikkelen", url: pdfFile, page: 16 }
+                ],
+                questions: [
+                    "Wat is AI en hoe zou je het in één zin uitleggen aan een collega?",
+                    "Welke AI-tools heb je wel eens voorbij zien komen in het onderwijs?",
+                    "Wat zijn je grootste zorgen over het gebruik van AI in de klas?",
+                    "Hoe denk je dat AI momenteel wordt gebruikt in het onderwijs?",
+                    "Welke voordelen zou AI kunnen bieden voor jouw lessen?"
+                ],
+                designTask: {
+                    title: "Ontwerp: AI-verkenning",
+                    description: "Maak een mindmap van alle mogelijke toepassingen van AI in jouw vakgebied. Gebruik minimaal 10 verschillende ideeën en categoriseer ze."
+                }
+            },
+            {
+                level: 1,
+                name: "Ontdekker",
+                description: "Eerste ervaringen met AI",
+                theory: {
+                    text: `
+                        <p>Als ontdekker heb je de eerste stap gezet en ben je gaan experimenteren met AI-tools. Je hebt ervaren dat AI verrassend goed kan zijn in bepaalde taken, maar ook dat het fouten maakt en soms onzin uitkraamt (ook wel 'hallucineren' genoemd).</p>
+                        
+                        <p>Op dit niveau leer je de mogelijkheden en beperkingen van AI kennen. Je ontdekt dat de kwaliteit van de output sterk afhangt van de input: hoe beter je prompt, hoe beter het resultaat. Dit wordt 'prompt engineering' genoemd en is een belangrijke vaardigheid.</p>
+                        
+                        <p>Ethische vraagstukken worden ook zichtbaar. Hoe ga je om met privacy als leerlingen AI gebruiken? Wat als leerlingen AI inzetten om hun huiswerk te maken? Mag dat? En zo ja, onder welke voorwaarden?</p>
+                        
+                        <p>Het onderscheid tussen 'narrow AI' (gespecialiseerd in één taak) en 'general AI' (breed inzetbaar, bestaat nog niet) wordt duidelijker. Je leert dat huidige AI indrukwekkend is, maar ook zijn duidelijke grenzen heeft.</p>
+                    `,
+                    keyPoints: [
+                        "Prompt engineering: goede input = goede output",
+                        "AI kan hallucineren (foutieve informatie geven)",
+                        "Ethische vraagstukken worden zichtbaar",
+                        "Narrow AI vs General AI: begrijp het verschil",
+                        "Experimenteren staat centraal"
+                    ]
+                },
+                materials: [
+                    { type: "link", title: "ChatGPT - prompt voorbeelden", url: "https://chat.openai.com" },
+                    { type: "link", title: "Prompt engineering guide", url: "https://www.promptingguide.ai/" },
+                    { type: "pdf", title: "Artikel 4: AI aanpassen aan jouw behoeften", url: pdfFile, page: 25 },
+                    { type: "pdf", title: "Artikel 5: AI als partner", url: pdfFile, page: 34 }
+                ],
+                questions: [
+                    "Met welke AI-tool heb je recent geëxperimenteerd en wat was je ervaring?",
+                    "Hoe zou je ChatGPT kunnen inzetten bij je lesvoorbereiding?",
+                    "Welke ethische bezwaren zie je bij AI-gebruik door leerlingen?",
+                    "Wat is het verschil tussen narrow AI en general AI?",
+                    "Hoe betrouwbaar vind je de output van huidige AI-tools?"
+                ],
+                designTask: {
+                    title: "Ontwerp: Eerste AI-assistent",
+                    description: "Ontwerp een eenvoudige prompt-sjabloon voor een AI-assistent die jou helpt bij het maken van lesmateriaal. Maak 5 verschillende prompts voor verschillende doeleinden."
+                }
+            },
+            {
+                level: 2,
+                name: "Gebruiker",
+                description: "Regelmatig AI-gebruik",
+                theory: {
+                    text: `
+                        <p>Als gevorderde gebruiker heb je AI geïntegreerd in je dagelijkse praktijk. Je gebruikt het niet alleen voor experimenten, maar voor concrete taken. Je hebt ontdekt welke tools het beste werken voor welke doeleinden en je hebt routines ontwikkeld.</p>
+                        
+                        <p>Op dit niveau wordt het belangrijk om richtlijnen te ontwikkelen voor AI-gebruik. Hoe zorg je dat leerlingen op een verantwoorde manier met AI omgaan? Welke afspraken maak je over het gebruik bij toetsen en opdrachten? Hoe voorkom je dat leerlingen klakkeloos AI-antwoorden overnemen?</p>
+                        
+                        <p>Je leert ook kritisch te kijken naar AI-output. Niet alles wat AI produceert is juist of geschikt. Je ontwikkelt een 'kritische blik' en leert hoe je AI-resultaten kunt controleren en verbeteren.</p>
+                        
+                        <p>Daarnaast ontdek je dat AI je kan helpen bij differentiatie: het aanpassen van lesmateriaal aan verschillende niveaus binnen één klas. Dit is een krachtige toepassing die je als docent veel tijd kan besparen.</p>
+                    `,
+                    keyPoints: [
+                        "AI is onderdeel van je dagelijkse praktijk",
+                        "Ontwikkel duidelijke richtlijnen voor leerlingen",
+                        "Kritische blik op AI-output is essentieel",
+                        "AI ondersteunt bij differentiatie",
+                        "Tijdsbesparing wordt merkbaar"
+                    ]
+                },
+                materials: [
+                    { type: "link", title: "ChatGPT - geavanceerd gebruik", url: "https://chat.openai.com" },
+                    { type: "link", title: "Snappet - adaptief leren", url: "https://www.snappet.nl/" },
+                    { type: "link", title: "Gynzy - digibord software", url: "https://www.gynzy.com/nl/" },
+                    { type: "pdf", title: "Artikel 6: Juridische kaders", url: pdfFile, page: 47 },
+                    { type: "pdf", title: "Artikel 7: Ethische kwesties", url: pdfFile, page: 55 }
+                ],
+                questions: [
+                    "Hoe integreer je AI nu concreet in je lespraktijk?",
+                    "Welke richtlijnen heb je opgesteld voor AI-gebruik door leerlingen?",
+                    "Hoe ga je om met AI-gegenereerde antwoorden bij toetsen?",
+                    "Welke AI-tool vind je het meest waardevol en waarom?",
+                    "Hoe zorg je voor kritisch denken bij AI-uitkomsten?"
+                ],
+                designTask: {
+                    title: "Ontwerp: Lesintegratie",
+                    description: "Ontwikkel een complete les van 50 minuten waarin leerlingen op een verantwoorde manier AI gebruiken. Beschrijf leerdoelen, werkvormen en evaluatie."
+                }
+            },
+            {
+                level: 3,
+                name: "Integrator",
+                description: "AI structureel inzetten",
+                theory: {
+                    text: `
+                        <p>Als integrator gebruik je AI niet alleen incidenteel, maar structureel en doordacht. Je hebt een visie ontwikkeld op hoe AI jouw onderwijs kan versterken en je past dit consequent toe. Je bent in staat om AI in te zetten voor complexe taken en ziet mogelijkheden die anderen missen.</p>
+                        
+                        <p>Op dit niveau ga je ook je collega's ondersteunen. Je deelt je kennis, helpt anderen op weg en draagt bij aan de professionele ontwikkeling van je team. Je wordt gezien als een aanspreekpunt voor AI-vragen binnen je school.</p>
+                        
+                        <p>Je ontwikkelt gestandaardiseerde werkwijzen en sjablonen die je met anderen deelt. Je denkt na over hoe AI structureel ingebed kan worden in het curriculum en in de schoolorganisatie.</p>
+                        
+                        <p>Ook meet je de effectiviteit van AI-toepassingen. Werkt het echt? Leerden leerlingen beter of sneller? Bespaarde het tijd? Je verzamelt data en gebruikt die om je aanpak te verbeteren.</p>
+                    `,
+                    keyPoints: [
+                        "Structurele en doordachte inzet van AI",
+                        "Je begeleidt en inspireert collega's",
+                        "Ontwikkeling van gestandaardiseerde werkwijzen",
+                        "Meten van effectiviteit",
+                        "AI wordt onderdeel van de schoolcultuur"
+                    ]
+                },
+                materials: [
+                    { type: "link", title: "Notion AI - planning en organisatie", url: "https://www.notion.so/product/ai" },
+                    { type: "link", title: "Teacher AI - assistent voor docenten", url: "https://www.teacherai.com/" },
+                    { type: "link", title: "LessonUp Analyse", url: "https://www.lessonup.com/nl/" },
+                    { type: "pdf", title: "Artikel 8: Starten met AI", url: pdfFile, page: 63 }
+                ],
+                questions: [
+                    "Hoe differentieer je met AI in je lessen voor verschillende niveaus?",
+                    "Welke professionele taken heb je geautomatiseerd met AI?",
+                    "Hoe begeleid je collega's bij het starten met AI?",
+                    "Wat zijn de beste prompts die je hebt ontwikkeld?",
+                    "Hoe meet je de effectiviteit van AI in je onderwijs?"
+                ],
+                designTask: {
+                    title: "Ontwerp: AI-werkwijze",
+                    description: "Creëer een gestandaardiseerde werkwijze voor AI-gebruik in jouw vakgroep. Ontwikkel een stappenplan, richtlijnen en evaluatieformulier."
+                }
+            },
+            {
+                level: 4,
+                name: "Expert",
+                description: "AI als tweede natuur",
+                theory: {
+                    text: `
+                        <p>Als expert is AI voor jou 'tweede natuur' geworden. Je zet het intuïtief en vloeiend in, zonder er bewust bij na te denken. Je hebt een diepgaand begrip van verschillende AI-tools en weet precies welke tool voor welke taak geschikt is.</p>
+                        
+                        <p>Op dit niveau combineer je verschillende AI-tools voor optimale resultaten. Je creëert workflows waarin meerdere AI-systemen samenwerken, zoals het gebruik van ChatGPT voor tekst, Midjourney voor beeld en ElevenLabs voor spraak in één project.</p>
+                        
+                        <p>Je bent ook in staat om AI aan te passen aan specifieke leerbehoeften. Je ontwikkelt custom prompts, finetuned modellen voor jouw context, of bouwt eenvoudige AI-oplossingen met bestaande tools en API's.</p>
+                        
+                        <p>Je signaleert de limitaties van huidige AI en denkt na over hoe deze in de toekomst opgelost kunnen worden. Je draagt actief bij aan AI-beleid op school en denkt mee over de lange termijn strategie.</p>
+                    `,
+                    keyPoints: [
+                        "AI-gebruik is intuïtief en vloeiend",
+                        "Combinatie van meerdere AI-tools",
+                        "Ontwikkeling van maatwerkoplossingen",
+                        "Signaleren van limitaties en kansen",
+                        "Bijdrage aan schoolbreed AI-beleid"
+                    ]
+                },
+                materials: [
+                    { type: "link", title: "Custom GPT - eigen AI bouwen", url: "https://chat.openai.com/gpts" },
+                    { type: "link", title: "ElevenLabs - geavanceerde spraak", url: "https://elevenlabs.io" },
+                    { type: "link", title: "Midjourney - beeldgeneratie", url: "https://www.midjourney.com/" },
+                    { type: "pdf", title: "Artikel 9: Mythes en valkuilen", url: pdfFile, page: 72 }
+                ],
+                questions: [
+                    "Hoe pas je AI aan voor specifieke leerbehoeften van studenten?",
+                    "Welke innovatieve toepassingen van AI heb je ontwikkeld?",
+                    "Hoe combineer je meerdere AI-tools voor optimaal resultaat?",
+                    "Wat zijn de limitaties van huidige AI in jouw onderwijspraktijk?",
+                    "Hoe draag je bij aan AI-beleid op school?"
+                ],
+                designTask: {
+                    title: "Ontwerp: Innovatieproject",
+                    description: "Ontwerp een innovatief AI-project voor jouw school dat minimaal 3 verschillende AI-tools combineert en een concreet onderwijsprobleem oplost."
+                }
+            },
+            {
+                level: 5,
+                name: "Master",
+                description: "AI-expert en vernieuwer",
+                theory: {
+                    text: `
+                        <p>Als master ben je niet alleen expert gebruiker, maar ook vernieuwer en visionair. Je ontwikkelt zelf AI-oplossingen voor het onderwijs, bijvoorbeeld door het bouwen van custom tools, het trainen van modellen of het ontwikkelen van nieuwe toepassingen.</p>
+                        
+                        <p>Op dit niveau heb je een heldere visie op de toekomst van AI in het onderwijs. Je kunt deze visie verwoorden, onderbouwen en anderen enthousiasmeren. Je denkt na over de impact van AI op de lange termijn: hoe ziet het onderwijs er over 5 of 10 jaar uit?</p>
+                        
+                        <p>Je begeleidt niet alleen je eigen school, maar ook andere scholen en organisaties bij AI-implementatie. Je deelt je kennis via presentaties, workshops of publicaties en draagt bij aan de bredere ontwikkeling van het onderwijsveld.</p>
+                        
+                        <p>Je houdt de nieuwste ontwikkelingen in AI scherp in de gaten en vertaalt deze naar de onderwijspraktijk. Je waarborgt kwaliteit en ethiek bij AI-gebruik en denkt na over verantwoorde innovatie. Je bent een thought leader op dit gebied.</p>
+                    `,
+                    keyPoints: [
+                        "Ontwikkeling van eigen AI-oplossingen",
+                        "Helder toekomstvisie op AI in onderwijs",
+                        "Begeleiding van andere scholen",
+                        "Kennis delen via presentaties en publicaties",
+                        "Borging van kwaliteit en ethiek"
+                    ]
+                },
+                materials: [
+                    { type: "link", title: "EU AI Act - officiële tekst", url: "https://digital-strategy.ec.europa.eu/nl/policies/european-approach-artificial-intelligence" },
+                    { type: "link", title: "UNESCO AI in Education", url: "https://www.unesco.org/en/digital-education/artificial-intelligence" },
+                    { type: "link", title: "Kennisnet AI richtlijnen", url: "https://www.kennisnet.nl/artificial-intelligence/" },
+                    { type: "pdf", title: "Complete artikelenreeks (1-9)", url: pdfFile, page: 1 }
+                ],
+                questions: [
+                    "Hoe ontwikkel je zelf AI-oplossingen voor het onderwijs?",
+                    "Welke visie heb je op AI in het onderwijs over 5 jaar?",
+                    "Hoe begeleid je andere scholen bij AI-implementatie?",
+                    "Wat zijn de nieuwste AI-ontwikkelingen die relevant zijn?",
+                    "Hoe waarborg je kwaliteit en ethiek bij AI-gebruik?"
+                ],
+                designTask: {
+                    title: "Ontwerp: AI-visie & Strategie",
+                    description: "Ontwikkel een complete AI-visie en implementatiestrategie voor jouw school. Werk dit uit in een plan voor de komende 3 jaar met concrete mijlpalen."
+                }
+            }
+        ];
+
+        // Initialize
+        document.getElementById('userName').value = currentUser;
+        renderLevelSelector();
+        renderLevel(currentLevel);
+        loadResults();
+        updateUserFilter();
+
+        function renderLevelSelector() {
+            const selector = document.getElementById('levelSelector');
+            selector.innerHTML = '';
+            levels.forEach(level => {
+                const btn = document.createElement('button');
+                btn.className = `level-btn ${currentLevel === level.level ? 'active' : ''}`;
+                btn.setAttribute('data-level', level.level);
+                btn.innerHTML = `Niveau ${level.level}<br><small>${level.name}</small>`;
+                btn.onclick = () => selectLevel(level.level);
+                selector.appendChild(btn);
+            });
+        }
+
+        function selectLevel(level) {
+            currentLevel = level;
+            renderLevelSelector();
+            renderLevel(level);
+        }
+
+        function renderLevel(level) {
+            const levelData = levels[level];
+            
+            // Render theorie in dynamisch tekstvak
+            const theorySection = document.getElementById('theorySection');
+            
+            let theoryHTML = `
+                <div class="theory-dynamic">
+                    <div class="theory-header">
+                        Theorie: Niveau ${level} - ${levelData.name}
+                    </div>
+                    <div class="theory-content">
+            `;
+            
+            // Voeg politie-waarschuwing toe voor niveau 0
+            if (level === 0) {
+                theoryHTML += `
+                    <div class="police-warning">
+                        <h4>⚠️ BELANGRIJKE VEILIGHEIDSWAARSCHUWING</h4>
+                        <ul>
+                            <li><strong>Gebruik nooit gegevens van jouw politie-account</strong> bij AI-tools</li>
+                            <li><strong>Gebruik nooit wachtwoorden van jouw politieaccount</strong> voor AI-diensten</li>
+                            <li><strong>Maak een nieuw, privé account aan</strong> dat geen enkele relatie heeft met de politie</li>
+                            <li>Gebruik een persoonlijk emailadres en uniek wachtwoord</li>
+                            <li>Deel geen operationele of vertrouwelijke informatie met AI</li>
+                        </ul>
+                    </div>
+                `;
+            }
+            
+            theoryHTML += `
+                        <div class="dynamic-text" id="dynamicTheoryText">
+                            ${levelData.theory.text}
+                        </div>
+                        <div class="theory-controls">
+                            <button class="theory-btn" onclick="toggleTheoryHeight()">Vergroot/verklein tekstvak</button>
+                            <button class="theory-btn" onclick="resetTheoryScroll()">Reset positie</button>
+                        </div>
+                        <div class="key-points">
+                            <div class="key-points-title">Kernpunten voor dit niveau:</div>
+                            <ul class="key-points-list">
+                                ${levelData.theory.keyPoints.map(point => `<li>${point}</li>`).join('')}
+                            </ul>
+                        </div>
+            `;
+            
+            // Voeg materialenlijst toe
+            if (levelData.materials && levelData.materials.length > 0) {
+                theoryHTML += `
+                    <div class="materials-section">
+                        <div class="materials-title">📚 Materialen voor niveau ${level}</div>
+                        <ul class="materials-list">
+                `;
+                
+                levelData.materials.forEach(item => {
+                    if (item.type === 'link') {
+                        theoryHTML += `<li><a href="${item.url}" target="_blank">${item.title}</a></li>`;
+                    } else if (item.type === 'pdf') {
+                        // Voor PDF met paginanummer
+                        const pdfUrl = item.page ? `${item.url}#page=${item.page}` : item.url;
+                        theoryHTML += `<li><a href="${pdfUrl}" target="_blank" class="pdf-link">📄 ${item.title} (pag. ${item.page})</a></li>`;
+                    }
+                });
+                
+                theoryHTML += `
+                        </ul>
+                    </div>
+                `;
+            }
+            
+            theoryHTML += `
+                    </div>
+                </div>
+            `;
+            
+            theorySection.innerHTML = theoryHTML;
+
+            // Render vragen
+            const questionsSection = document.getElementById('questionsSection');
+            questionsSection.innerHTML = `
+                <div class="level-title">
+                    Niveau ${level}: ${levelData.name}
+                    <span class="level-badge">${levelData.description}</span>
+                </div>
+            `;
+
+            levelData.questions.forEach((question, index) => {
+                const questionId = `q${level}_${index}`;
+                const savedAnswer = localStorage.getItem(`${currentUser}_${questionId}`) || '';
+                
+                questionsSection.innerHTML += `
+                    <div class="question-item" id="question-${level}-${index}">
+                        <div class="question-number">Vraag ${index + 1}/5</div>
+                        <div class="question-text">${question}</div>
+                        <textarea class="answer-input" id="input-${level}-${index}" placeholder="Jouw antwoord..." rows="3">${savedAnswer}</textarea>
+                        <button class="save-btn" onclick="saveAnswer(${level}, ${index})">Antwoord opslaan</button>
+                        <div id="status-${level}-${index}" class="status-message"></div>
+                    </div>
+                `;
+            });
+
+            // Render ontwerpopdracht met speciale mindmap editor voor niveau 0
+            const designSection = document.getElementById('designSection');
+            const savedDesign = localStorage.getItem(`${currentUser}_design_${level}`) || '';
+            
+            let designHTML = `
+                <h2>${levelData.designTask.title}</h2>
+                <div class="design-box">
+                    <div class="design-description">${levelData.designTask.description}</div>
+            `;
+            
+            // Voor niveau 0: speciale mindmap editor
+            if (level === 0) {
+                designHTML += `
+                    <div class="mindmap-editor" id="mindmapEditor">
+                        <div class="mindmap-tools">
+                            <button class="mindmap-tool-btn" onclick="addMindmapNode()">
+                                + Voeg categorie toe
+                            </button>
+                            <button class="mindmap-tool-btn" onclick="saveMindmap()">
+                                Mindmap opslaan
+                            </button>
+                            <button class="mindmap-tool-btn" onclick="loadMindmap()">
+                                Mindmap laden
+                            </button>
+                        </div>
+                        
+                        <div class="mindmap-canvas" id="mindmapCanvas">
+                            <!-- Centraal concept (rondje) -->
+                            <div class="central-concept">
+                                <span class="central-label">CENTRAAL CONCEPT</span>
+                                <input type="text" class="central-concept-input" id="centralConcept" 
+                                    placeholder="AI in onderwijs" value="AI in onderwijs">
+                            </div>
+                            
+                            <div class="arrow-down"></div>
+                            
+                            <!-- Container voor nodes (rechthoekig) -->
+                            <div class="nodes-container" id="nodesContainer">
+                                <!-- Nodes worden hier dynamisch toegevoegd -->
+                            </div>
+                            
+                            <button class="add-node-btn" onclick="addMindmapNode()">
+                                + Nieuwe categorie toevoegen
+                            </button>
+                        </div>
+                        
+                        <div class="mindmap-actions">
+                            <textarea id="mindmapData" style="display:none;"></textarea>
+                        </div>
+                    </div>
+                `;
+            } else {
+                // Voor andere niveaus: standaard textarea
+                designHTML += `
+                    <textarea class="answer-input" id="design-${level}" placeholder="Werk hier je ontwerp uit..." rows="10">${savedDesign}</textarea>
+                    <button class="save-btn" onclick="saveDesign(${level})">Ontwerp opslaan</button>
+                `;
+            }
+            
+            designHTML += `<div id="status-design-${level}" class="status-message"></div></div>`;
+            designSection.innerHTML = designHTML;
+            
+            // Als niveau 0, laad opgeslagen mindmap
+            if (level === 0) {
+                setTimeout(loadMindmap, 100);
+            }
+        }
+
+        // Mindmap functies
+        let nodeCount = 0;
+
+        function addMindmapNode() {
+            const container = document.getElementById('nodesContainer');
+            if (!container) return;
+            
+            nodeCount++;
+            const nodeId = `node_${nodeCount}`;
+            
+            const nodeHTML = `
+                <div class="node-item" id="${nodeId}">
+                    <div class="node-arrow"></div>
+                    <div class="node-rectangle">
+                        <div class="node-header">
+                            <span class="node-label">Categorie ${nodeCount}</span>
+                            <button class="node-delete" onclick="deleteMindmapNode('${nodeId}')">×</button>
+                        </div>
+                        <textarea class="node-textarea" 
+                            placeholder="Beschrijf deze categorie..."></textarea>
+                    </div>
+                </div>
+            `;
+            
+            container.insertAdjacentHTML('beforeend', nodeHTML);
+        }
+
+        function deleteMindmapNode(nodeId) {
+            const node = document.getElementById(nodeId);
+            if (node) {
+                node.remove();
+            }
+        }
+
+        function saveMindmap() {
+            const centralConcept = document.getElementById('centralConcept')?.value || 'AI in onderwijs';
+            
+            const nodes = [];
+            const nodeElements = document.querySelectorAll('.node-item');
+            
+            nodeElements.forEach((node, index) => {
+                const textarea = node.querySelector('.node-textarea');
+                const label = node.querySelector('.node-label');
+                nodes.push({
+                    id: node.id,
+                    label: label ? label.innerText : `Categorie ${index + 1}`,
+                    content: textarea ? textarea.value : ''
+                });
+            });
+            
+            const mindmapData = {
+                centralConcept: centralConcept,
+                nodes: nodes,
+                timestamp: new Date().toISOString()
+            };
+            
+            // Sla op in localStorage
+            localStorage.setItem(`${currentUser}_mindmap`, JSON.stringify(mindmapData));
+            
+            // Sla ook op als design voor niveau 0
+            localStorage.setItem(`${currentUser}_design_0`, JSON.stringify(mindmapData));
+            
+            // Sla op in Firebase
+            if (database) {
+                const designData = {
+                    userId: currentUser,
+                    level: 0,
+                    design: JSON.stringify(mindmapData),
+                    timestamp: new Date().toISOString()
+                };
+                
+                database.ref('designs/' + currentUser + '_0').set(designData)
+                    .then(() => {
+                        showStatus('status-design-0', 'Mindmap opgeslagen in database!', 'success');
+                        loadResults();
+                    })
+                    .catch(error => {
+                        console.error('Firebase error:', error);
+                        showStatus('status-design-0', 'Fout bij opslaan in database, maar lokaal opgeslagen', 'error');
+                    });
+            } else {
+                showStatus('status-design-0', 'Mindmap lokaal opgeslagen', 'success');
+            }
+            
+            // Toon bevestiging
+            alert('Mindmap opgeslagen!');
+        }
+
+        function loadMindmap() {
+            const savedMindmap = localStorage.getItem(`${currentUser}_mindmap`);
+            if (!savedMindmap) return;
+            
+            try {
+                const mindmapData = JSON.parse(savedMindmap);
+                
+                // Centraal concept
+                const centralInput = document.getElementById('centralConcept');
+                if (centralInput) {
+                    centralInput.value = mindmapData.centralConcept || 'AI in onderwijs';
+                }
+                
+                // Verwijder bestaande nodes
+                const container = document.getElementById('nodesContainer');
+                if (container) {
+                    container.innerHTML = '';
+                    
+                    // Voeg opgeslagen nodes toe
+                    if (mindmapData.nodes && mindmapData.nodes.length > 0) {
+                        nodeCount = 0;
+                        mindmapData.nodes.forEach(node => {
+                            nodeCount++;
+                            const nodeId = `node_${nodeCount}`;
+                            
+                            const nodeHTML = `
+                                <div class="node-item" id="${nodeId}">
+                                    <div class="node-arrow"></div>
+                                    <div class="node-rectangle">
+                                        <div class="node-header">
+                                            <span class="node-label">${node.label || `Categorie ${nodeCount}`}</span>
+                                            <button class="node-delete" onclick="deleteMindmapNode('${nodeId}')">×</button>
+                                        </div>
+                                        <textarea class="node-textarea" 
+                                            placeholder="Beschrijf deze categorie...">${node.content || ''}</textarea>
+                                    </div>
+                                </div>
+                            `;
+                            
+                            container.insertAdjacentHTML('beforeend', nodeHTML);
+                        });
+                    }
+                }
+            } catch (e) {
+                console.error('Fout bij laden mindmap:', e);
+            }
+        }
+
+        // Functies voor dynamisch tekstvak
+        function toggleTheoryHeight() {
+            const textElement = document.getElementById('dynamicTheoryText');
+            if (textElement) {
+                if (textElement.style.maxHeight === '600px') {
+                    textElement.style.maxHeight = '300px';
+                } else {
+                    textElement.style.maxHeight = '600px';
+                }
+            }
+        }
+
+        function resetTheoryScroll() {
+            const textElement = document.getElementById('dynamicTheoryText');
+            if (textElement) {
+                textElement.scrollTop = 0;
+            }
+        }
+
+        function saveAnswer(level, questionIndex) {
+            const input = document.getElementById(`input-${level}-${questionIndex}`);
+            const answer = input.value;
+            const questionId = `q${level}_${questionIndex}`;
+            
+            localStorage.setItem(`${currentUser}_${questionId}`, answer);
+            
+            if (database) {
+                const answerData = {
+                    userId: currentUser,
+                    level: level,
+                    questionIndex: questionIndex,
+                    answer: answer,
+                    timestamp: new Date().toISOString()
+                };
+                
+                database.ref('answers/' + currentUser + '_' + questionId).set(answerData)
+                    .then(() => {
+                        showStatus(`status-${level}-${questionIndex}`, 'Antwoord opgeslagen in database!', 'success');
+                        loadResults();
+                    })
+                    .catch(error => {
+                        console.error('Firebase error:', error);
+                        showStatus(`status-${level}-${questionIndex}`, 'Fout bij opslaan in database, maar lokaal opgeslagen', 'error');
+                    });
+            } else {
+                showStatus(`status-${level}-${questionIndex}`, 'Antwoord lokaal opgeslagen (geen database)', 'success');
+            }
+        }
+
+        function saveDesign(level) {
+            // Voor niveau 0 gebruiken we de mindmap saven functie
+            if (level === 0) {
+                saveMindmap();
+                return;
+            }
+            
+            const input = document.getElementById(`design-${level}`);
+            if (!input) return;
+            
+            const design = input.value;
+            
+            localStorage.setItem(`${currentUser}_design_${level}`, design);
+            
+            if (database) {
+                const designData = {
+                    userId: currentUser,
+                    level: level,
+                    design: design,
+                    timestamp: new Date().toISOString()
+                };
+                
+                database.ref('designs/' + currentUser + '_' + level).set(designData)
+                    .then(() => {
+                        showStatus(`status-design-${level}`, 'Ontwerp opgeslagen in database!', 'success');
+                        loadResults();
+                    })
+                    .catch(error => {
+                        console.error('Firebase error:', error);
+                        showStatus(`status-design-${level}`, 'Fout bij opslaan in database, maar lokaal opgeslagen', 'error');
+                    });
+            } else {
+                showStatus(`status-design-${level}`, 'Ontwerp lokaal opgeslagen (geen database)', 'success');
+            }
+        }
+
+        function showStatus(elementId, message, type) {
+            const statusEl = document.getElementById(elementId);
+            if (!statusEl) return;
+            
+            statusEl.textContent = message;
+            statusEl.className = `status-message status-${type}`;
+            statusEl.style.display = 'block';
+            
+            setTimeout(() => {
+                statusEl.style.display = 'none';
+            }, 3000);
+        }
+
+        function updateUser() {
+            const newUser = document.getElementById('userName').value.trim();
+            if (newUser) {
+                currentUser = newUser;
+                localStorage.setItem('currentUser', currentUser);
+                renderLevel(currentLevel);
+                updateUserFilter();
+                loadResults();
+                alert(`Gebruiker gewijzigd naar: ${currentUser}`);
+            }
+        }
+
+        function updateUserFilter() {
+            const filterUser = document.getElementById('filterUser');
+            if (!database) return;
+            
+            database.ref('answers').once('value', (snapshot) => {
+                const answers = snapshot.val() || {};
+                const users = new Set();
+                
+                Object.values(answers).forEach(answer => {
+                    if (answer.userId) users.add(answer.userId);
+                });
+                
+                filterUser.innerHTML = '<option value="all">Alle deelnemers</option>';
+                users.forEach(user => {
+                    filterUser.innerHTML += `<option value="${user}">${user}</option>`;
+                });
+            });
+        }
+
+        function loadResults() {
+            const resultsGrid = document.getElementById('resultsGrid');
+            const filterLevel = document.getElementById('filterLevel').value;
+            const filterUser = document.getElementById('filterUser').value;
+            
+            if (!database) {
+                resultsGrid.innerHTML = '<p>Database niet verbonden. Toon lokale resultaten...</p>';
+                loadLocalResults();
+                return;
+            }
+            
+            Promise.all([
+                database.ref('answers').once('value'),
+                database.ref('designs').once('value')
+            ]).then(([answersSnapshot, designsSnapshot]) => {
+                const answers = answersSnapshot.val() || {};
+                const designs = designsSnapshot.val() || {};
+                
+                let allResults = [];
+                
+                Object.values(answers).forEach(answer => {
+                    allResults.push({
+                        type: 'answer',
+                        userId: answer.userId,
+                        level: answer.level,
+                        questionIndex: answer.questionIndex,
+                        questionText: levels[answer.level]?.questions[answer.questionIndex] || 'Vraag niet gevonden',
+                        content: answer.answer,
+                        timestamp: answer.timestamp,
+                        levelName: levels[answer.level]?.name || 'Onbekend'
+                    });
+                });
+                
+                Object.values(designs).forEach(design => {
+                    allResults.push({
+                        type: 'design',
+                        userId: design.userId,
+                        level: design.level,
+                        designTitle: levels[design.level]?.designTask.title || 'Ontwerpopdracht',
+                        content: design.design,
+                        timestamp: design.timestamp,
+                        levelName: levels[design.level]?.name || 'Onbekend'
+                    });
+                });
+                
+                if (filterLevel !== 'all') {
+                    allResults = allResults.filter(r => r.level == filterLevel);
+                }
+                if (filterUser !== 'all') {
+                    allResults = allResults.filter(r => r.userId === filterUser);
+                }
+                
+                allResults.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+                
+                if (allResults.length === 0) {
+                    resultsGrid.innerHTML = '<p>Nog geen resultaten voor deze filters.</p>';
+                    return;
+                }
+                
+                resultsGrid.innerHTML = allResults.map(result => {
+                    if (result.type === 'answer') {
+                        return `
+                            <div class="result-card answer-card">
+                                <div class="result-header">
+                                    <span class="result-name">${result.userId}</span>
+                                    <span class="result-level">Niveau ${result.level}: ${result.levelName}</span>
+                                </div>
+                                <div class="result-type-badge question-badge">Vraag ${result.questionIndex + 1}</div>
+                                <div class="result-question">
+                                    <strong>Vraag:</strong><br>
+                                    ${result.questionText}
+                                </div>
+                                <div class="result-answer">
+                                    <strong>Antwoord:</strong><br>
+                                    ${result.content || 'Geen antwoord'}
+                                </div>
+                                <small style="color: #666; display: block; margin-top: 10px;">
+                                    ${new Date(result.timestamp).toLocaleString()}
+                                </small>
+                            </div>
+                        `;
+                    } else {
+                        // Probeer mindmap data te formatteren als het niveau 0 is
+                        let displayContent = result.content;
+                        if (result.level === 0 && result.content) {
+                            try {
+                                const mindmapData = JSON.parse(result.content);
+                                displayContent = `Centraal concept: ${mindmapData.centralConcept}\nAantal categorieën: ${mindmapData.nodes?.length || 0}`;
+                            } catch (e) {
+                                // Geen geldige JSON, toon zoals het is
+                            }
+                        }
+                        
+                        return `
+                            <div class="result-card design-card">
+                                <div class="result-header">
+                                    <span class="result-name">${result.userId}</span>
+                                    <span class="result-level">Niveau ${result.level}: ${result.levelName}</span>
+                                </div>
+                                <div class="result-type-badge design-badge">Ontwerpproduct</div>
+                                <div class="result-question">
+                                    <strong>${result.designTitle}</strong>
+                                </div>
+                                <div class="result-answer">
+                                    <strong>Uitwerking:</strong><br>
+                                    ${formatDesignContent(displayContent)}
+                                </div>
+                                <small style="color: #666; display: block; margin-top: 10px;">
+                                    ${new Date(result.timestamp).toLocaleString()}
+                                </small>
+                            </div>
+                        `;
+                    }
+                }).join('');
+                
+                addResultsSummary(allResults);
+                
+            }).catch(error => {
+                console.error('Error loading results:', error);
+                resultsGrid.innerHTML = '<p>Fout bij laden van resultaten</p>';
+            });
+        }
+
+        function formatDesignContent(content) {
+            if (!content) return 'Geen uitwerking';
+            if (content.length > 200) {
+                const shortContent = content.substring(0, 200) + '...';
+                return `
+                    <div class="design-content-preview">
+                        ${shortContent}
+                        <button class="expand-btn" onclick="expandDesign(this)" data-fullcontent="${encodeURIComponent(content)}">Lees meer</button>
+                    </div>
+                    <div class="design-content-full" style="display:none;">${content}</div>
+                `;
+            }
+            return content;
+        }
+
+        function expandDesign(btn) {
+            const fullContent = decodeURIComponent(btn.dataset.fullcontent);
+            const preview = btn.closest('.design-content-preview');
+            preview.style.display = 'none';
+            const full = btn.closest('.result-card').querySelector('.design-content-full');
+            full.style.display = 'block';
+        }
+
+        function addResultsSummary(results) {
+            const summary = {};
+            results.forEach(result => {
+                if (!summary[result.userId]) {
+                    summary[result.userId] = {
+                        answers: {},
+                        designs: {}
+                    };
+                }
+                
+                if (result.type === 'answer') {
+                    if (!summary[result.userId].answers[result.level]) {
+                        summary[result.userId].answers[result.level] = [];
+                    }
+                    summary[result.userId].answers[result.level].push(result.questionIndex);
+                } else {
+                    summary[result.userId].designs[result.level] = true;
+                }
+            });
+            
+            const summaryHTML = `
+                <div class="results-summary">
+                    <h3>Samenvatting per deelnemer</h3>
+                    <div class="summary-grid">
+                        ${Object.entries(summary).map(([user, data]) => `
+                            <div class="summary-item">
+                                <strong>${user}</strong><br>
+                                <span class="summary-answers">
+                                    Vragen beantwoord: 
+                                    ${Object.entries(data.answers).map(([level, questions]) => 
+                                        `niv.${level} (${questions.length}/5)`
+                                    ).join(', ') || 'Geen'}
+                                </span><br>
+                                <span class="summary-designs">
+                                    Ontwerpen: 
+                                    ${Object.keys(data.designs).map(level => 
+                                        `niv.${level}`
+                                    ).join(', ') || 'Geen'}
+                                </span>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+            
+            const resultsSection = document.querySelector('.results-section');
+            const existingSummary = resultsSection.querySelector('.results-summary');
+            if (existingSummary) {
+                existingSummary.remove();
+            }
+            resultsSection.insertAdjacentHTML('afterbegin', summaryHTML);
+        }
+
+        function loadLocalResults() {
+            const resultsGrid = document.getElementById('resultsGrid');
+            const localResults = [];
+            
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                
+                if (key.includes('_q')) {
+                    const parts = key.split('_');
+                    const user = parts[0];
+                    const levelQuestion = parts[1];
+                    const level = levelQuestion.substring(1, 2);
+                    const questionIndex = levelQuestion.substring(3);
+                    
+                    localResults.push({
+                        type: 'answer',
+                        user: user,
+                        level: level,
+                        questionIndex: questionIndex,
+                        content: localStorage.getItem(key),
+                        key: key
+                    });
+                } else if (key.includes('_design_') || key.includes('_mindmap')) {
+                    const parts = key.split('_');
+                    const user = parts[0];
+                    const level = key.includes('mindmap') ? '0' : parts[2];
+                    
+                    localResults.push({
+                        type: 'design',
+                        user: user,
+                        level: level,
+                        content: localStorage.getItem(key),
+                        key: key
+                    });
+                }
+            }
+            
+            if (localResults.length === 0) {
+                resultsGrid.innerHTML = '<p>Nog geen lokale resultaten.</p>';
+                return;
+            }
+            
+            resultsGrid.innerHTML = localResults.map(result => {
+                if (result.type === 'answer') {
+                    return `
+                        <div class="result-card answer-card">
+                            <div class="result-header">
+                                <span class="result-name">${result.user}</span>
+                                <span class="result-level">Niveau ${result.level}</span>
+                            </div>
+                            <div class="result-type-badge question-badge">Vraag ${parseInt(result.questionIndex) + 1}</div>
+                            <div class="result-answer">
+                                <strong>Lokaal antwoord:</strong><br>
+                                ${result.content.substring(0, 150)}${result.content.length > 150 ? '...' : ''}
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    return `
+                        <div class="result-card design-card">
+                            <div class="result-header">
+                                <span class="result-name">${result.user}</span>
+                                <span class="result-level">Niveau ${result.level}</span>
+                            </div>
+                            <div class="result-type-badge design-badge">Lokaal ontwerp</div>
+                            <div class="result-answer">
+                                <strong>Ontwerp (lokaal):</strong><br>
+                                ${result.content.substring(0, 150)}${result.content.length > 150 ? '...' : ''}
+                            </div>
+                        </div>
+                    `;
+                }
+            }).join('');
+        }
+    </script>
+</body>
+</html>
