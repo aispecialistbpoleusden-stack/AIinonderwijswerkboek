@@ -13,7 +13,7 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: #0a1a2b;
             min-height: 100vh;
             padding: 20px;
         }
@@ -21,33 +21,37 @@
         .container {
             max-width: 1400px;
             margin: 0 auto;
-            background: white;
+            background: #f5f5f5;
             border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
             overflow: hidden;
+            border: 1px solid #c9a959;
         }
 
         header {
-            background: linear-gradient(135deg, #6B73FF 0%, #000DFF 100%);
+            background: linear-gradient(135deg, #0a1a2b 0%, #1a2c3e 100%);
             color: white;
             padding: 40px;
             text-align: center;
+            border-bottom: 3px solid #c9a959;
         }
 
         header h1 {
             font-size: 2.5em;
             margin-bottom: 10px;
+            color: #c9a959;
         }
 
         header p {
             font-size: 1.2em;
             opacity: 0.9;
+            color: #ffffff;
         }
 
         .user-section {
-            background: #f8f9fa;
+            background: #ffffff;
             padding: 20px 40px;
-            border-bottom: 2px solid #e9ecef;
+            border-bottom: 2px solid #c9a959;
             display: flex;
             gap: 20px;
             align-items: center;
@@ -62,14 +66,14 @@
         .user-input label {
             display: block;
             margin-bottom: 5px;
-            color: #495057;
+            color: #0a1a2b;
             font-weight: 600;
         }
 
         .user-input input {
             width: 100%;
             padding: 12px;
-            border: 2px solid #ced4da;
+            border: 2px solid #c9a959;
             border-radius: 8px;
             font-size: 1em;
             transition: border-color 0.3s;
@@ -77,23 +81,24 @@
 
         .user-input input:focus {
             outline: none;
-            border-color: #6B73FF;
+            border-color: #0a1a2b;
         }
 
         .user-button {
-            background: #28a745;
-            color: white;
-            border: none;
+            background: #0a1a2b;
+            color: #c9a959;
+            border: 2px solid #c9a959;
             padding: 12px 30px;
             border-radius: 8px;
             font-size: 1em;
             cursor: pointer;
-            transition: background 0.3s;
+            transition: all 0.3s;
             font-weight: 600;
         }
 
         .user-button:hover {
-            background: #218838;
+            background: #c9a959;
+            color: #0a1a2b;
         }
 
         .level-selector {
@@ -101,8 +106,8 @@
             flex-wrap: wrap;
             gap: 5px;
             padding: 20px 40px;
-            background: #f1f3f5;
-            border-bottom: 2px solid #dee2e6;
+            background: #e5e5e5;
+            border-bottom: 2px solid #c9a959;
         }
 
         .level-btn {
@@ -111,31 +116,35 @@
             padding: 15px 10px;
             border: none;
             background: white;
-            color: #495057;
+            color: #0a1a2b;
             font-weight: bold;
             font-size: 1.1em;
             cursor: pointer;
             transition: all 0.3s;
             border-radius: 8px;
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            border: 1px solid #c9a959;
         }
 
         .level-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            box-shadow: 0 5px 15px rgba(201, 169, 89, 0.3);
+            background: #c9a959;
+            color: #0a1a2b;
         }
 
         .level-btn.active {
-            background: linear-gradient(135deg, #6B73FF 0%, #000DFF 100%);
-            color: white;
+            background: #0a1a2b;
+            color: #c9a959;
+            border: 1px solid #c9a959;
         }
 
-        .level-btn[data-level="0"] { border-left: 5px solid #dc3545; }
-        .level-btn[data-level="1"] { border-left: 5px solid #fd7e14; }
-        .level-btn[data-level="2"] { border-left: 5px solid #ffc107; }
-        .level-btn[data-level="3"] { border-left: 5px solid #28a745; }
-        .level-btn[data-level="4"] { border-left: 5px solid #17a2b8; }
-        .level-btn[data-level="5"] { border-left: 5px solid #6610f2; }
+        .level-btn[data-level="0"] { border-left: 5px solid #0a1a2b; }
+        .level-btn[data-level="1"] { border-left: 5px solid #0a1a2b; }
+        .level-btn[data-level="2"] { border-left: 5px solid #0a1a2b; }
+        .level-btn[data-level="3"] { border-left: 5px solid #0a1a2b; }
+        .level-btn[data-level="4"] { border-left: 5px solid #0a1a2b; }
+        .level-btn[data-level="5"] { border-left: 5px solid #0a1a2b; }
 
         .content {
             display: flex;
@@ -146,29 +155,29 @@
             flex: 1;
             min-width: 300px;
             padding: 40px;
-            background: #f8f9fa;
-            border-right: 2px solid #e9ecef;
+            background: #ffffff;
+            border-right: 2px solid #c9a959;
         }
 
         .questions-section {
             flex: 2;
             min-width: 400px;
             padding: 40px;
-            background: white;
+            background: #f5f5f5;
         }
 
         .design-section {
             flex: 1;
             min-width: 300px;
             padding: 40px;
-            background: #f8f9fa;
-            border-left: 2px solid #e9ecef;
+            background: #ffffff;
+            border-left: 2px solid #c9a959;
         }
 
         .level-title {
             font-size: 2em;
             margin-bottom: 30px;
-            color: #333;
+            color: #0a1a2b;
             display: flex;
             align-items: center;
             gap: 15px;
@@ -179,74 +188,107 @@
             border-radius: 25px;
             font-size: 0.5em;
             font-weight: normal;
-            background: #6c757d;
-            color: white;
+            background: #0a1a2b;
+            color: #c9a959;
+            border: 1px solid #c9a959;
         }
 
-        .info-block {
-            background: white;
+        /* Dynamisch tekstvak voor theorie */
+        .theory-dynamic {
+            background: #ffffff;
             border-radius: 15px;
-            padding: 25px;
+            padding: 0;
             margin-bottom: 30px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
-            border-left: 5px solid #6B73FF;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            border-left: 5px solid #c9a959;
+            overflow: hidden;
         }
 
-        .info-title {
-            font-size: 1.3em;
-            color: #333;
-            margin-bottom: 15px;
+        .theory-header {
+            background: #0a1a2b;
+            color: #c9a959;
+            padding: 15px 25px;
+            font-size: 1.2em;
             font-weight: bold;
-            display: flex;
-            align-items: center;
-            gap: 10px;
+            border-bottom: 2px solid #c9a959;
         }
 
-        .info-title i {
-            color: #6B73FF;
+        .theory-content {
+            padding: 25px;
         }
 
-        .scrollable-text {
-            max-height: 200px;
+        .dynamic-text {
+            max-height: 250px;
             overflow-y: auto;
             padding: 15px;
             background: #f8f9fa;
-            border-radius: 10px;
+            border-radius: 8px;
             margin-bottom: 20px;
-            border: 1px solid #e9ecef;
+            border: 1px solid #c9a959;
             line-height: 1.6;
-            color: #495057;
+            color: #333333;
+            transition: max-height 0.3s ease;
         }
 
-        .scrollable-text p {
+        .dynamic-text.expanded {
+            max-height: 500px;
+        }
+
+        .dynamic-text p {
             margin-bottom: 10px;
         }
 
-        .scrollable-text::-webkit-scrollbar {
+        .dynamic-text::-webkit-scrollbar {
             width: 8px;
         }
 
-        .scrollable-text::-webkit-scrollbar-track {
+        .dynamic-text::-webkit-scrollbar-track {
             background: #f1f1f1;
             border-radius: 10px;
         }
 
-        .scrollable-text::-webkit-scrollbar-thumb {
-            background: #6B73FF;
+        .dynamic-text::-webkit-scrollbar-thumb {
+            background: #c9a959;
             border-radius: 10px;
         }
 
+        .theory-controls {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+            justify-content: flex-end;
+        }
+
+        .theory-btn {
+            background: #0a1a2b;
+            color: #c9a959;
+            border: 1px solid #c9a959;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: all 0.3s;
+        }
+
+        .theory-btn:hover {
+            background: #c9a959;
+            color: #0a1a2b;
+        }
+
         .key-points {
-            background: linear-gradient(135deg, #f5f7ff 0%, #eef0ff 100%);
+            background: linear-gradient(135deg, #f8f4e8 0%, #f0e8d8 100%);
             border-radius: 10px;
             padding: 20px;
+            border-left: 4px solid #c9a959;
         }
 
         .key-points-title {
             font-weight: bold;
-            color: #333;
+            color: #0a1a2b;
             margin-bottom: 15px;
             font-size: 1.1em;
+            border-bottom: 1px solid #c9a959;
+            padding-bottom: 5px;
         }
 
         .key-points-list {
@@ -255,10 +297,10 @@
         }
 
         .key-points-list li {
-            padding: 10px 0 10px 30px;
+            padding: 10px 0 10px 25px;
             position: relative;
-            border-bottom: 1px solid rgba(107, 115, 255, 0.2);
-            color: #495057;
+            border-bottom: 1px solid rgba(201, 169, 89, 0.2);
+            color: #333333;
         }
 
         .key-points-list li:last-child {
@@ -266,16 +308,17 @@
         }
 
         .key-points-list li:before {
-            content: "🎯";
+            content: "•";
             position: absolute;
             left: 0;
-            color: #6B73FF;
-            font-size: 1.1em;
+            color: #c9a959;
+            font-size: 1.5em;
+            font-weight: bold;
         }
 
         .question-item {
             background: white;
-            border: 2px solid #e9ecef;
+            border: 2px solid #c9a959;
             border-radius: 12px;
             padding: 20px;
             margin-bottom: 20px;
@@ -283,20 +326,22 @@
         }
 
         .question-item:hover {
-            border-color: #6B73FF;
-            box-shadow: 0 5px 20px rgba(107, 115, 255, 0.1);
+            border-color: #0a1a2b;
+            box-shadow: 0 5px 20px rgba(10, 26, 43, 0.1);
         }
 
         .question-number {
             font-size: 1.2em;
             font-weight: bold;
-            color: #6B73FF;
+            color: #0a1a2b;
             margin-bottom: 10px;
+            border-bottom: 1px solid #c9a959;
+            padding-bottom: 5px;
         }
 
         .question-text {
             font-size: 1.1em;
-            color: #333;
+            color: #333333;
             margin-bottom: 15px;
             line-height: 1.6;
         }
@@ -304,26 +349,33 @@
         .answer-input {
             width: 100%;
             padding: 15px;
-            border: 2px solid #ced4da;
+            border: 2px solid #c9a959;
             border-radius: 8px;
             font-size: 1em;
             margin: 10px 0;
             resize: vertical;
+            background: #f8f9fa;
+        }
+
+        .answer-input:focus {
+            outline: none;
+            border-color: #0a1a2b;
         }
 
         .save-btn {
-            background: #6B73FF;
-            color: white;
-            border: none;
+            background: #0a1a2b;
+            color: #c9a959;
+            border: 2px solid #c9a959;
             padding: 10px 25px;
             border-radius: 8px;
             cursor: pointer;
-            transition: background 0.3s;
+            transition: all 0.3s;
             font-weight: 600;
         }
 
         .save-btn:hover {
-            background: #000DFF;
+            background: #c9a959;
+            color: #0a1a2b;
         }
 
         .design-box {
@@ -332,31 +384,36 @@
             padding: 25px;
             margin-top: 20px;
             box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+            border: 1px solid #c9a959;
         }
 
         .design-title {
             font-size: 1.3em;
-            color: #333;
+            color: #0a1a2b;
             margin-bottom: 15px;
             font-weight: bold;
+            border-bottom: 1px solid #c9a959;
+            padding-bottom: 5px;
         }
 
         .design-description {
-            color: #666;
+            color: #333333;
             margin-bottom: 20px;
             line-height: 1.6;
         }
 
         .results-section {
             padding: 40px;
-            background: #f1f3f5;
-            border-top: 2px solid #dee2e6;
+            background: #e5e5e5;
+            border-top: 3px solid #c9a959;
         }
 
         .results-title {
             font-size: 1.8em;
-            color: #333;
+            color: #0a1a2b;
             margin-bottom: 20px;
+            border-bottom: 2px solid #c9a959;
+            padding-bottom: 10px;
         }
 
         .results-filters {
@@ -368,10 +425,17 @@
 
         .filter-select {
             padding: 10px;
-            border: 2px solid #ced4da;
+            border: 2px solid #c9a959;
             border-radius: 8px;
             font-size: 1em;
             min-width: 200px;
+            background: white;
+            color: #0a1a2b;
+        }
+
+        .filter-select:focus {
+            outline: none;
+            border-color: #0a1a2b;
         }
 
         .results-grid {
@@ -385,6 +449,7 @@
             border-radius: 12px;
             padding: 20px;
             box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            border-left: 4px solid #c9a959;
         }
 
         .result-header {
@@ -392,24 +457,53 @@
             justify-content: space-between;
             margin-bottom: 15px;
             padding-bottom: 10px;
-            border-bottom: 2px solid #e9ecef;
+            border-bottom: 2px solid #c9a959;
         }
 
         .result-name {
             font-weight: bold;
-            color: #333;
+            color: #0a1a2b;
         }
 
         .result-level {
-            background: #6B73FF;
-            color: white;
+            background: #0a1a2b;
+            color: #c9a959;
             padding: 3px 10px;
             border-radius: 15px;
             font-size: 0.9em;
+            border: 1px solid #c9a959;
         }
 
+        .result-type-badge {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 15px;
+            font-size: 0.9em;
+            margin-bottom: 10px;
+        }
+        
+        .question-badge {
+            background: #0a1a2b;
+            color: #c9a959;
+            border: 1px solid #c9a959;
+        }
+        
+        .design-badge {
+            background: #c9a959;
+            color: #0a1a2b;
+            border: 1px solid #0a1a2b;
+        }
+        
+        .answer-card {
+            border-left: 4px solid #0a1a2b;
+        }
+        
+        .design-card {
+            border-left: 4px solid #c9a959;
+        }
+        
         .result-question {
-            color: #666;
+            color: #333333;
             margin-bottom: 10px;
         }
 
@@ -417,7 +511,8 @@
             background: #f8f9fa;
             padding: 10px;
             border-radius: 8px;
-            color: #333;
+            color: #333333;
+            border: 1px solid #c9a959;
         }
 
         .status-message {
@@ -439,49 +534,24 @@
             border: 1px solid #f5c6cb;
         }
 
-        /* Nieuwe stijlen voor resultaten */
-        .result-type-badge {
-            display: inline-block;
-            padding: 3px 10px;
-            border-radius: 15px;
-            font-size: 0.9em;
-            margin-bottom: 10px;
-        }
-        
-        .question-badge {
-            background: #e3f2fd;
-            color: #1976d2;
-        }
-        
-        .design-badge {
-            background: #f3e5f5;
-            color: #7b1fa2;
-        }
-        
-        .answer-card {
-            border-left: 4px solid #1976d2;
-        }
-        
-        .design-card {
-            border-left: 4px solid #7b1fa2;
-        }
-        
         .design-content-preview {
             position: relative;
         }
         
         .expand-btn {
             background: none;
-            border: none;
-            color: #6B73FF;
+            border: 2px solid #c9a959;
+            color: #0a1a2b;
             cursor: pointer;
-            text-decoration: underline;
+            padding: 5px 10px;
             margin-left: 5px;
+            border-radius: 5px;
             font-size: 0.9em;
         }
         
         .expand-btn:hover {
-            color: #000DFF;
+            background: #c9a959;
+            color: #0a1a2b;
         }
         
         .results-summary {
@@ -490,6 +560,7 @@
             padding: 20px;
             margin-bottom: 25px;
             box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            border: 2px solid #c9a959;
         }
         
         .summary-grid {
@@ -503,17 +574,18 @@
             background: #f8f9fa;
             padding: 15px;
             border-radius: 8px;
-            border-left: 4px solid #6B73FF;
+            border-left: 4px solid #c9a959;
         }
         
         .summary-answers {
-            color: #1976d2;
+            color: #0a1a2b;
             font-size: 0.9em;
         }
         
         .summary-designs {
-            color: #7b1fa2;
+            color: #c9a959;
             font-size: 0.9em;
+            font-weight: bold;
         }
 
         @media (max-width: 768px) {
@@ -523,12 +595,12 @@
             
             .theory-section {
                 border-right: none;
-                border-bottom: 2px solid #e9ecef;
+                border-bottom: 2px solid #c9a959;
             }
             
             .design-section {
                 border-left: none;
-                border-top: 2px solid #e9ecef;
+                border-top: 2px solid #c9a959;
             }
         }
     </style>
@@ -540,16 +612,16 @@
 <body>
     <div class="container">
         <header>
-            <h1>🤖 AI in het Onderwijs</h1>
+            <h1>AI IN HET ONDERWIJS</h1>
             <p>Interactief werkboek - Van beginner tot expert (Niveau 0 → 5)</p>
         </header>
 
         <div class="user-section">
             <div class="user-input">
-                <label for="userName">📝 Jouw naam</label>
+                <label for="userName">Jouw naam</label>
                 <input type="text" id="userName" placeholder="Voer je naam in..." value="Docent">
             </div>
-            <button class="user-button" onclick="updateUser()">✅ Bevestig naam</button>
+            <button class="user-button" onclick="updateUser()">Bevestig naam</button>
         </div>
 
         <div class="level-selector" id="levelSelector">
@@ -558,7 +630,7 @@
 
         <div class="content">
             <div class="theory-section" id="theorySection">
-                <!-- Theorie wordt hier dynamisch geladen -->
+                <!-- Theorie wordt hier dynamisch geladen in dynamische tekstvakken -->
             </div>
 
             <div class="questions-section" id="questionsSection">
@@ -571,7 +643,7 @@
         </div>
 
         <div class="results-section" id="resultsSection">
-            <h2 class="results-title">📊 Resultatenoverzicht</h2>
+            <h2 class="results-title">Resultatenoverzicht</h2>
             <div class="results-filters">
                 <select class="filter-select" id="filterLevel" onchange="loadResults()">
                     <option value="all">Alle niveaus</option>
@@ -609,9 +681,9 @@
         try {
             firebase.initializeApp(firebaseConfig);
             database = firebase.database();
-            console.log("✅ Firebase Spark database verbonden!");
+            console.log("Firebase database verbonden!");
         } catch (error) {
-            console.error("❌ Firebase init error:", error);
+            console.error("Firebase init error:", error);
         }
 
         // Huidige gebruiker en niveau
@@ -651,7 +723,7 @@
                     "Welke voordelen zou AI kunnen bieden voor jouw lessen?"
                 ],
                 designTask: {
-                    title: "🎯 Ontwerp: AI-verkenning",
+                    title: "Ontwerp: AI-verkenning",
                     description: "Maak een mindmap van alle mogelijke toepassingen van AI in jouw vakgebied. Gebruik minimaal 10 verschillende ideeën en categoriseer ze."
                 }
             },
@@ -685,7 +757,7 @@
                     "Hoe betrouwbaar vind je de output van huidige AI-tools?"
                 ],
                 designTask: {
-                    title: "🤖 Ontwerp: Eerste AI-assistent",
+                    title: "Ontwerp: Eerste AI-assistent",
                     description: "Ontwerp een eenvoudige prompt-sjabloon voor een AI-assistent die jou helpt bij het maken van lesmateriaal. Maak 5 verschillende prompts voor verschillende doeleinden."
                 }
             },
@@ -719,7 +791,7 @@
                     "Hoe zorg je voor kritisch denken bij AI-uitkomsten?"
                 ],
                 designTask: {
-                    title: "📚 Ontwerp: Lesintegratie",
+                    title: "Ontwerp: Lesintegratie",
                     description: "Ontwikkel een complete les van 50 minuten waarin leerlingen op een verantwoorde manier AI gebruiken. Beschrijf leerdoelen, werkvormen en evaluatie."
                 }
             },
@@ -753,7 +825,7 @@
                     "Hoe meet je de effectiviteit van AI in je onderwijs?"
                 ],
                 designTask: {
-                    title: "⚙️ Ontwerp: AI-werkwijze",
+                    title: "Ontwerp: AI-werkwijze",
                     description: "Creëer een gestandaardiseerde werkwijze voor AI-gebruik in jouw vakgroep. Ontwikkel een stappenplan, richtlijnen en evaluatieformulier."
                 }
             },
@@ -787,7 +859,7 @@
                     "Hoe draag je bij aan AI-beleid op school?"
                 ],
                 designTask: {
-                    title: "🚀 Ontwerp: Innovatieproject",
+                    title: "Ontwerp: Innovatieproject",
                     description: "Ontwerp een innovatief AI-project voor jouw school dat minimaal 3 verschillende AI-tools combineert en een concreet onderwijsprobleem oplost."
                 }
             },
@@ -821,7 +893,7 @@
                     "Hoe waarborg je kwaliteit en ethiek bij AI-gebruik?"
                 ],
                 designTask: {
-                    title: "🌟 Ontwerp: AI-visie & Strategie",
+                    title: "Ontwerp: AI-visie & Strategie",
                     description: "Ontwikkel een complete AI-visie en implementatiestrategie voor jouw school. Werk dit uit in een plan voor de komende 3 jaar met concrete mijlpalen."
                 }
             }
@@ -856,21 +928,27 @@
         function renderLevel(level) {
             const levelData = levels[level];
             
-            // Render theorie
+            // Render theorie in dynamisch tekstvak
             const theorySection = document.getElementById('theorySection');
             theorySection.innerHTML = `
-                <div class="info-block">
-                    <div class="info-title">
-                        <i>📚</i> Theorie: Niveau ${level} - ${levelData.name}
+                <div class="theory-dynamic">
+                    <div class="theory-header">
+                        Theorie: Niveau ${level} - ${levelData.name}
                     </div>
-                    <div class="scrollable-text">
-                        ${levelData.theory.text}
-                    </div>
-                    <div class="key-points">
-                        <div class="key-points-title">🎯 Kernpunten voor dit niveau:</div>
-                        <ul class="key-points-list">
-                            ${levelData.theory.keyPoints.map(point => `<li>${point}</li>`).join('')}
-                        </ul>
+                    <div class="theory-content">
+                        <div class="dynamic-text" id="dynamicTheoryText">
+                            ${levelData.theory.text}
+                        </div>
+                        <div class="theory-controls">
+                            <button class="theory-btn" onclick="toggleTheoryHeight()">Vergroot/verklein tekstvak</button>
+                            <button class="theory-btn" onclick="resetTheoryScroll()">Reset positie</button>
+                        </div>
+                        <div class="key-points">
+                            <div class="key-points-title">Kernpunten voor dit niveau:</div>
+                            <ul class="key-points-list">
+                                ${levelData.theory.keyPoints.map(point => `<li>${point}</li>`).join('')}
+                            </ul>
+                        </div>
                     </div>
                 </div>
             `;
@@ -893,7 +971,7 @@
                         <div class="question-number">Vraag ${index + 1}/5</div>
                         <div class="question-text">${question}</div>
                         <textarea class="answer-input" id="input-${level}-${index}" placeholder="Jouw antwoord..." rows="3">${savedAnswer}</textarea>
-                        <button class="save-btn" onclick="saveAnswer(${level}, ${index})">💾 Antwoord opslaan</button>
+                        <button class="save-btn" onclick="saveAnswer(${level}, ${index})">Antwoord opslaan</button>
                         <div id="status-${level}-${index}" class="status-message"></div>
                     </div>
                 `;
@@ -908,10 +986,29 @@
                 <div class="design-box">
                     <div class="design-description">${levelData.designTask.description}</div>
                     <textarea class="answer-input" id="design-${level}" placeholder="Werk hier je ontwerp uit..." rows="10">${savedDesign}</textarea>
-                    <button class="save-btn" onclick="saveDesign(${level})">💾 Ontwerp opslaan</button>
+                    <button class="save-btn" onclick="saveDesign(${level})">Ontwerp opslaan</button>
                     <div id="status-design-${level}" class="status-message"></div>
                 </div>
             `;
+        }
+
+        // Functies voor dynamisch tekstvak
+        function toggleTheoryHeight() {
+            const textElement = document.getElementById('dynamicTheoryText');
+            if (textElement) {
+                if (textElement.style.maxHeight === '500px') {
+                    textElement.style.maxHeight = '250px';
+                } else {
+                    textElement.style.maxHeight = '500px';
+                }
+            }
+        }
+
+        function resetTheoryScroll() {
+            const textElement = document.getElementById('dynamicTheoryText');
+            if (textElement) {
+                textElement.scrollTop = 0;
+            }
         }
 
         function saveAnswer(level, questionIndex) {
@@ -932,15 +1029,15 @@
                 
                 database.ref('answers/' + currentUser + '_' + questionId).set(answerData)
                     .then(() => {
-                        showStatus(`status-${level}-${questionIndex}`, '✅ Antwoord opgeslagen in Firebase!', 'success');
+                        showStatus(`status-${level}-${questionIndex}`, 'Antwoord opgeslagen in database!', 'success');
                         loadResults();
                     })
                     .catch(error => {
                         console.error('Firebase error:', error);
-                        showStatus(`status-${level}-${questionIndex}`, '❌ Fout bij opslaan in database, maar lokaal opgeslagen', 'error');
+                        showStatus(`status-${level}-${questionIndex}`, 'Fout bij opslaan in database, maar lokaal opgeslagen', 'error');
                     });
             } else {
-                showStatus(`status-${level}-${questionIndex}`, '✅ Antwoord lokaal opgeslagen (geen database)', 'success');
+                showStatus(`status-${level}-${questionIndex}`, 'Antwoord lokaal opgeslagen (geen database)', 'success');
             }
         }
 
@@ -960,15 +1057,15 @@
                 
                 database.ref('designs/' + currentUser + '_' + level).set(designData)
                     .then(() => {
-                        showStatus(`status-design-${level}`, '✅ Ontwerp opgeslagen in Firebase!', 'success');
+                        showStatus(`status-design-${level}`, 'Ontwerp opgeslagen in database!', 'success');
                         loadResults();
                     })
                     .catch(error => {
                         console.error('Firebase error:', error);
-                        showStatus(`status-design-${level}`, '❌ Fout bij opslaan in database, maar lokaal opgeslagen', 'error');
+                        showStatus(`status-design-${level}`, 'Fout bij opslaan in database, maar lokaal opgeslagen', 'error');
                     });
             } else {
-                showStatus(`status-design-${level}`, '✅ Ontwerp lokaal opgeslagen (geen database)', 'success');
+                showStatus(`status-design-${level}`, 'Ontwerp lokaal opgeslagen (geen database)', 'success');
             }
         }
 
@@ -991,7 +1088,7 @@
                 renderLevel(currentLevel);
                 updateUserFilter();
                 loadResults();
-                alert(`✅ Gebruiker gewijzigd naar: ${currentUser}`);
+                alert(`Gebruiker gewijzigd naar: ${currentUser}`);
             }
         }
 
@@ -1020,7 +1117,7 @@
             const filterUser = document.getElementById('filterUser').value;
             
             if (!database) {
-                resultsGrid.innerHTML = '<p>⚠️ Database niet verbonden. Toon lokale resultaten...</p>';
+                resultsGrid.innerHTML = '<p>Database niet verbonden. Toon lokale resultaten...</p>';
                 loadLocalResults();
                 return;
             }
@@ -1069,7 +1166,7 @@
                 allResults.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
                 
                 if (allResults.length === 0) {
-                    resultsGrid.innerHTML = '<p>📭 Nog geen resultaten voor deze filters.</p>';
+                    resultsGrid.innerHTML = '<p>Nog geen resultaten voor deze filters.</p>';
                     return;
                 }
                 
@@ -1081,7 +1178,7 @@
                                     <span class="result-name">${result.userId}</span>
                                     <span class="result-level">Niveau ${result.level}: ${result.levelName}</span>
                                 </div>
-                                <div class="result-type-badge question-badge">❓ Vraag ${result.questionIndex + 1}</div>
+                                <div class="result-type-badge question-badge">Vraag ${result.questionIndex + 1}</div>
                                 <div class="result-question">
                                     <strong>Vraag:</strong><br>
                                     ${result.questionText}
@@ -1090,8 +1187,8 @@
                                     <strong>Antwoord:</strong><br>
                                     ${result.content || 'Geen antwoord'}
                                 </div>
-                                <small style="color: #999; display: block; margin-top: 10px;">
-                                    🕐 ${new Date(result.timestamp).toLocaleString()}
+                                <small style="color: #666; display: block; margin-top: 10px;">
+                                    ${new Date(result.timestamp).toLocaleString()}
                                 </small>
                             </div>
                         `;
@@ -1102,7 +1199,7 @@
                                     <span class="result-name">${result.userId}</span>
                                     <span class="result-level">Niveau ${result.level}: ${result.levelName}</span>
                                 </div>
-                                <div class="result-type-badge design-badge">🎨 Ontwerpproduct</div>
+                                <div class="result-type-badge design-badge">Ontwerpproduct</div>
                                 <div class="result-question">
                                     <strong>${result.designTitle}</strong>
                                 </div>
@@ -1110,8 +1207,8 @@
                                     <strong>Uitwerking:</strong><br>
                                     ${formatDesignContent(result.content)}
                                 </div>
-                                <small style="color: #999; display: block; margin-top: 10px;">
-                                    🕐 ${new Date(result.timestamp).toLocaleString()}
+                                <small style="color: #666; display: block; margin-top: 10px;">
+                                    ${new Date(result.timestamp).toLocaleString()}
                                 </small>
                             </div>
                         `;
@@ -1122,7 +1219,7 @@
                 
             }).catch(error => {
                 console.error('Error loading results:', error);
-                resultsGrid.innerHTML = '<p>❌ Fout bij laden van resultaten</p>';
+                resultsGrid.innerHTML = '<p>Fout bij laden van resultaten</p>';
             });
         }
 
@@ -1171,19 +1268,19 @@
             
             const summaryHTML = `
                 <div class="results-summary">
-                    <h3>📊 Samenvatting per deelnemer</h3>
+                    <h3>Samenvatting per deelnemer</h3>
                     <div class="summary-grid">
                         ${Object.entries(summary).map(([user, data]) => `
                             <div class="summary-item">
                                 <strong>${user}</strong><br>
                                 <span class="summary-answers">
-                                    ✅ Vragen beantwoord: 
+                                    Vragen beantwoord: 
                                     ${Object.entries(data.answers).map(([level, questions]) => 
                                         `niv.${level} (${questions.length}/5)`
                                     ).join(', ') || 'Geen'}
                                 </span><br>
                                 <span class="summary-designs">
-                                    🎨 Ontwerpen: 
+                                    Ontwerpen: 
                                     ${Object.keys(data.designs).map(level => 
                                         `niv.${level}`
                                     ).join(', ') || 'Geen'}
@@ -1240,7 +1337,7 @@
             }
             
             if (localResults.length === 0) {
-                resultsGrid.innerHTML = '<p>📭 Nog geen lokale resultaten.</p>';
+                resultsGrid.innerHTML = '<p>Nog geen lokale resultaten.</p>';
                 return;
             }
             
@@ -1252,7 +1349,7 @@
                                 <span class="result-name">${result.user}</span>
                                 <span class="result-level">Niveau ${result.level}</span>
                             </div>
-                            <div class="result-type-badge question-badge">❓ Vraag ${parseInt(result.questionIndex) + 1}</div>
+                            <div class="result-type-badge question-badge">Vraag ${parseInt(result.questionIndex) + 1}</div>
                             <div class="result-answer">
                                 <strong>Lokaal antwoord:</strong><br>
                                 ${result.content.substring(0, 150)}${result.content.length > 150 ? '...' : ''}
@@ -1266,7 +1363,7 @@
                                 <span class="result-name">${result.user}</span>
                                 <span class="result-level">Niveau ${result.level}</span>
                             </div>
-                            <div class="result-type-badge design-badge">🎨 Lokaal ontwerp</div>
+                            <div class="result-type-badge design-badge">Lokaal ontwerp</div>
                             <div class="result-answer">
                                 <strong>Ontwerp (lokaal):</strong><br>
                                 ${result.content.substring(0, 150)}${result.content.length > 150 ? '...' : ''}
